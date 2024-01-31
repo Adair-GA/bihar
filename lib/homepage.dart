@@ -1,25 +1,10 @@
+import 'package:bihar/model/GAUR_Controller.dart';
+import 'package:bihar/model/profile.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        useMaterial3: true,
-      ),
-      home: const HomePage(title: 'BIHAR'),
-    );
-  }
-}
+import 'package:get_it/get_it.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.title});
-
 
   final String title;
 
@@ -40,11 +25,10 @@ class _HomePageState extends State<HomePage> {
       body: Center(
           child: Column(
             children: [
-              Text("Home Page"),
+              // _profile(),
+              const Text("Home Page"),
               ElevatedButton(onPressed: () async {
-                final storage = FlutterSecureStorage();
-                await storage.delete(key: 'ldap');
-                Navigator.of(context).pushReplacementNamed('/login');
+                await logout(context);
               }, child: const Text("Logout")),
             ],
           ),
@@ -66,6 +50,31 @@ class _HomePageState extends State<HomePage> {
           )
       ],
     ),
+    );
+  }
+
+  Future<void> logout(BuildContext context) async {
+    GetIt.instance.get<GaurController>().logout();
+    Navigator.of(context).pushReplacementNamed('/login');
+  }
+
+  Widget _profile(){
+    UserProfile? profile = GetIt.instance.get<GaurController>().profile;
+    return Row(
+      children: [
+        const Padding(
+          padding: EdgeInsets.all(20.0),
+        ),
+        profile?.foto ?? const Icon(Icons.account_circle, size: 100),
+        Column(
+          children: [
+            Text(profile?.nombre ?? "Nombre"),
+            Text(profile?.dni ?? "Apellidos"),
+            Text(profile?.facultad ?? "Email"),
+            Text(profile?.grado ?? "Teléfono"),
+          ],
+        )
+      ],
     );
   }
 }

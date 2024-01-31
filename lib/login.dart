@@ -1,5 +1,7 @@
+import 'package:bihar/model/gaur_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:get_it/get_it.dart';
 
 
 class Login extends StatefulWidget {
@@ -94,14 +96,25 @@ class _LoginState extends State<Login> {
       decoration: BoxDecoration(
           color: Colors.blue, borderRadius: BorderRadius.circular(20)),
       child: ElevatedButton(
-        onPressed: () {
-          if (_loginformKey.currentState!.validate()) {
-            _loginformKey.currentState!.save();
-            const storage = FlutterSecureStorage();
-            storage.write(key: 'ldap', value: _ldap!);
-            storage.write(key: 'password', value: _password!);
+        onPressed: () async{
+          if (!_loginformKey.currentState!.validate()) {
+            return;
           }
-        Navigator.of(context).pushReplacementNamed('/home');
+          _loginformKey.currentState!.save();
+          switch (await GetIt.instance.get<GaurController>().login(_ldap!, _password!)) {
+            case GaurResponse.ok:
+              Navigator.of(context).pushReplacementNamed('/home');
+              break;
+            case GaurResponse.connectionError:
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Error de conexión')));
+              break;
+            case GaurResponse.userNotFound:
+            case GaurResponse.wrongPassword:
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Credenciales incorrectas')));
+              break;
+            default:
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Error desconocido')));
+        }
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),

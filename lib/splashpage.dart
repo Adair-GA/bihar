@@ -1,8 +1,6 @@
-import 'dart:convert';
-
+import 'package:bihar/model/gaur_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:http/http.dart' as http;
+import 'package:get_it/get_it.dart';
 
 class SplashPage extends StatefulWidget {
   SplashPage({Key? key}) : super(key: key);
@@ -13,52 +11,24 @@ class SplashPage extends StatefulWidget {
 
 class _SplashPageState extends State<SplashPage> {
   @override
-  initState() async{
-    final ldap = await _getLdap();
-    final pass = await _getPass();
-    if (ldap == null || pass == null) {
-      Navigator.of(context).pushReplacementNamed('/login');
-    } 
-    final response = await http.post(
-      Uri.parse('https://gestion-servicios.ehu.es/gaurMovilRS/rest/login/doLogin'),
-      body: {
-        '_clave': pass,
-        '_recordar': "S",
-        '_usuario': ldap,
-        '_idioma': 'es',
-        //TODO: Change this to the actual device id
-        '_device_id': "64235997dc003f48"
-      }
-    );
-    if (response.statusCode == 200) {
-      auth_header = response.headers['auth-token']!;
-
-      Navigator.of(context).pushReplacementNamed('/home');
-    } else {
-      Navigator.of(context).pushReplacementNamed('/login');
-    }
+  void initState() {
     super.initState();
+    GetIt.instance.get<GaurController>().login(null, null).then((value) => 
+    {
+      if (value == GaurResponse.ok) {
+        Navigator.of(context).pushReplacementNamed('/home')
+      } else {
+        Navigator.of(context).pushReplacementNamed('/login')
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: Center(
-        child: Container(
-          child: Text("Loading..."),
+        child: CircularProgressIndicator()
         ),
-      ),
-    );
+      );
   }
-
-  Future<String?> _getLdap() async{
-    final storage = FlutterSecureStorage();
-    return await storage.read(key: 'ldap');
-  }
-
-  Future<String?> _getPass() async{
-    final storage = FlutterSecureStorage();
-    return await storage.read(key: 'password');
-  }
-
 }
