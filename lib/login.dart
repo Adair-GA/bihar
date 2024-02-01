@@ -101,7 +101,7 @@ class _LoginState extends State<Login> {
             return;
           }
           _loginformKey.currentState!.save();
-          switch (await GetIt.instance.get<GaurController>().login(_ldap!, _password!)) {
+          switch (await GaurController().login(_ldap!, _password!)) {
             case GaurResponse.ok:
               Navigator.of(context).pushReplacementNamed('/home');
               break;

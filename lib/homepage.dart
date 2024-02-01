@@ -1,31 +1,30 @@
 import 'package:bihar/model/GAUR_Controller.dart';
 import 'package:bihar/model/profile.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key, required this.title});
-
-  final String title;
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  UserProfile? profile;
 
   @override
   Widget build(BuildContext context) {
+    GaurController().profile;
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
+        title: Text("A"),
       ),
       body: Center(
           child: Column(
             children: [
-              // _profile(),
+              _profile(context),
               const Text("Home Page"),
               ElevatedButton(onPressed: () async {
                 await logout(context);
@@ -54,12 +53,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> logout(BuildContext context) async {
-    GetIt.instance.get<GaurController>().logout();
+    GaurController().logout();
     Navigator.of(context).pushReplacementNamed('/login');
   }
 
-  Widget _profile(){
-    UserProfile? profile = GetIt.instance.get<GaurController>().profile;
+  Widget _profile(BuildContext context){
+    UserProfile? profile = GaurController().profile;
     return Row(
       children: [
         const Padding(

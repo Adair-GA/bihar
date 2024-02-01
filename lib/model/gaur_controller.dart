@@ -15,17 +15,23 @@ enum GaurResponse{
 }
 
 class GaurController {
+  static final GaurController _instance = GaurController._internal(); 
   static const String _url = "https://gestion-servicios.ehu.es/gaurMovilRS/rest";
-  static final _client = http.Client();
+  final http.Client _client = http.Client();
   static const _storage = FlutterSecureStorage();
   String? _authToken;
   String? _ldap;
   String? _pass;
   UserProfile? profile;
 
-  GaurController(){
-    _getLdap().then((value) => _ldap = value);
-    _getPass().then((value) => _pass = value);
+
+  factory GaurController() => _instance;
+
+  GaurController._internal();
+
+  Future<void> init() async {
+    _ldap = await _getLdap();
+    _pass = await _getPass();
   }
 
   Future<String?> _getLdap() async{
@@ -70,7 +76,6 @@ class GaurController {
     if (response.headers.containsKey("auth-token")) {
       _authToken = response.headers['auth-token']!;
       profile = await _buildProfile(response);
-      log(profile.toString());
       _storage.write(key: 'ldap', value: ldap);
       _storage.write(key: 'password', value: pass);
       return GaurResponse.ok;
@@ -95,7 +100,6 @@ class GaurController {
     if (body["foto"] != null) {
       foto = Image.memory(base64Decode(body["foto"]));
     }
-    debugger();
     http.Response? response = await http.post(
       Uri.parse('$_url/expedientes/getExpedientesByIdp'),
       headers: {
