@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 import 'package:bihar/model/profile.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
@@ -96,9 +94,9 @@ class GaurController {
     var body = jsonDecode(loginResponse.body);
     String dni = body["numDocumento"];
     String nombre = body["compactado"];
-    Image? foto;
+    String? foto;
     if (body["foto"] != null) {
-      foto = Image.memory(base64Decode(body["foto"]));
+      foto = body["foto"];
     }
     http.Response? response = await http.post(
       Uri.parse('$_url/expedientes/getExpedientesByIdp'),
