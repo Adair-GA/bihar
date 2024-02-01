@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       routes: <String, WidgetBuilder>{
         "/splash":(context) => SplashPage(),
         '/home': (context) => HomePage(),
-        '/login': (BuildContext context) => const Login(),
+        '/login': (context) => Login(),
       }
     );
   }

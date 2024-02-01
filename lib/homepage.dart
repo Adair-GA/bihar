@@ -1,9 +1,9 @@
-import 'package:bihar/model/GAUR_Controller.dart';
+import 'package:bihar/model/gaur_controller.dart';
 import 'package:bihar/model/profile.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -14,7 +14,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    GaurController().profile;
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
