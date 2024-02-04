@@ -1,8 +1,6 @@
 
 
 import 'dart:convert';
-
-import 'package:bihar/model/clase.dart';
 import 'package:bihar/model/dia.dart';
 import 'package:intl/date_symbol_data_local.dart';
 

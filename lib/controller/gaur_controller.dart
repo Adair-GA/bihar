@@ -17,7 +17,6 @@ enum GaurLoginResponse{
 class GaurController {
   static final GaurController _instance = GaurController._internal(); 
   static const _storage = FlutterSecureStorage();
-  String? _authToken;
   String? _ldap;
   String? _pass;
   UserProfile? profile;
@@ -46,7 +45,7 @@ class GaurController {
     unawaited(_storage.delete(key: 'pass'));
     _ldap = null;
     _pass = null;
-    _authToken = null;
+    GlobalData.authToken = null;
   }
 
   Future<GaurLoginResponse> login(String? ldap, String? pass) async{
@@ -78,12 +77,13 @@ class GaurController {
             return GaurLoginResponse.userNotFound;
           }
         }
-      _authToken = response.headers['auth-token']!;
+      GlobalData.authToken = response.headers['auth-token']!;
       profile = await _buildProfile(response);
       } on http.ClientException catch (_) {
         return GaurLoginResponse.connectionError;
       }
       setExpediente(0);
+
       _storage.write(key: 'ldap', value: ldap);
       _storage.write(key: 'password', value: pass);
       return GaurLoginResponse.ok;
@@ -100,7 +100,7 @@ class GaurController {
     http.Response response = await GlobalData.client.post(
       Uri.parse('${GlobalData.url}/expedientes/getExpedientesByIdp'),
       headers: {
-        'auth-token': _authToken!,
+        'auth-token': GlobalData.authToken!,
         'Accept': '*/*'
       }
     );
