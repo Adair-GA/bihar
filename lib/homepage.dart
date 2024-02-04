@@ -1,5 +1,6 @@
 import 'package:bihar/model/gaur_controller.dart';
 import 'package:bihar/routes/home.dart';
+import 'package:bihar/routes/timetable.dart';
 import 'package:flutter/material.dart';
 
 
@@ -64,16 +65,10 @@ class _HomePageState extends State<HomePage> {
       case 0:
         return Home();
       case 1:
-        return _timetable(context);
+        return TimeTable();
       default:
         return Home();
     }
-  }
-
-  Widget _timetable(BuildContext context){
-    return const Center(
-      child: Text("Timetable"),
-    );
   }
 }
 

@@ -15,13 +15,14 @@ enum GaurResponse{
 
 class GaurController {
   static final GaurController _instance = GaurController._internal(); 
-  static const String _url = "https://gestion-servicios.ehu.es/gaurMovilRS/rest";
+  static const String _url = "https://aa4ee609-656b-4a43-bb77-cd47683986d8.mock.pstmn.io/gaurMovilRS/rest";
   final http.Client _client = http.Client();
   static const _storage = FlutterSecureStorage();
   String? _authToken;
   String? _ldap;
   String? _pass;
   UserProfile? profile;
+  Expediente? expedienteActivo;
 
 
   factory GaurController() => _instance;
@@ -75,6 +76,7 @@ class GaurController {
     if (response.headers.containsKey("auth-token")) {
       _authToken = response.headers['auth-token']!;
       profile = await _buildProfile(response);
+      setExpediente(0);
       _storage.write(key: 'ldap', value: ldap);
       _storage.write(key: 'password', value: pass);
       return GaurResponse.ok;
@@ -117,7 +119,10 @@ class GaurController {
           body[i]["estadoExpediente"] == "Abierto"
         ));
     }
-
     return UserProfile(nombre, dni, foto, expedientes);
+  }
+
+  void setExpediente(int index) {
+    expedienteActivo = profile!.expedientes[index];
   }
 }
