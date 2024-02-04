@@ -104,14 +104,14 @@ class _LoginState extends State<Login> {
               Navigator.of(context).pushReplacementNamed('/home');
               break;
             case GaurLoginResponse.connectionError:
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Error de conexión')));
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Error de conexión', style: TextStyle(color: Colors.white)), backgroundColor: Colors.red));
               break;
             case GaurLoginResponse.userNotFound:
             case GaurLoginResponse.wrongPassword:
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Credenciales incorrectas')));
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Credenciales incorrectas', style: TextStyle(color: Colors.white)), backgroundColor: Colors.red));
               break;
             default:
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Error desconocido')));
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Error desconocido', style: TextStyle(color: Colors.white)), backgroundColor: Colors.red));
         }
         },
         style: ButtonStyle(
