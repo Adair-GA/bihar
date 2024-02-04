@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:text_scroll/text_scroll.dart';
 
 class TimeTable extends StatefulWidget {
   const TimeTable({Key? key}) : super(key: key);
+  
   @override
   _TimeTableState createState() => _TimeTableState();
 }
