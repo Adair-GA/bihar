@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:bihar/model/expediente.dart';
 import 'package:bihar/model/profile.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
@@ -106,9 +107,17 @@ class GaurController {
       }
     );
     body = jsonDecode(response.body);
-    String facultad = body[0]["descCentro"];
-    String carrera = body[0]["descPlan"];
+    int numExpedientes = body.length;
+    List<Expediente> expedientes = [];
+    for (int i = 0; i < numExpedientes; i++) {
+      expedientes.add(Expediente(
+          body[i]["numExpediente"],
+          body[i]["descCentro"],
+          body[i]["descPlan"],
+          body[i]["estadoExpediente"] == "Abierto"
+        ));
+    }
 
-    return UserProfile(nombre, dni, facultad, carrera, foto);
+    return UserProfile(nombre, dni, foto, expedientes);
   }
 }

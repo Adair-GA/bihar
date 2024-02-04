@@ -40,6 +40,8 @@ dependencies:
   flutter_secure_storage: ^9.0.0
   http: ^1.2.0
   get_it: ^7.6.7
+  basic_utils: ^5.7.0
+  text_scroll: ^0.2.0
 
 dev_dependencies:
   flutter_test:
