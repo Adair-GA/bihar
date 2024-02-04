@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:bihar/controller/global_data.dart';
 import 'package:bihar/model/expediente.dart';
 import 'package:bihar/model/profile.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
-enum GaurResponse{
+enum GaurLoginResponse{
   ok,
   connectionError,
   userNotFound,
@@ -15,8 +16,6 @@ enum GaurResponse{
 
 class GaurController {
   static final GaurController _instance = GaurController._internal(); 
-  static const String _url = "https://aa4ee609-656b-4a43-bb77-cd47683986d8.mock.pstmn.io/gaurMovilRS/rest";
-  final http.Client _client = http.Client();
   static const _storage = FlutterSecureStorage();
   String? _authToken;
   String? _ldap;
@@ -50,18 +49,18 @@ class GaurController {
     _authToken = null;
   }
 
-  Future<GaurResponse> login(String? ldap, String? pass) async{
+  Future<GaurLoginResponse> login(String? ldap, String? pass) async{
     http.Response? response;
     if (ldap == null && pass == null) {
       ldap = _ldap;
       pass = _pass;
     }
     if (ldap == null || pass == null) {
-      return GaurResponse.noStoredCredentials;
+      return GaurLoginResponse.noStoredCredentials;
     }
-    try {
-       response = await _client.post(
-        Uri.parse('$_url/login/doLogin'),
+    try{
+      response = await GlobalData.client.post(
+        Uri.parse('${GlobalData.url}/login/doLogin'),
         body: {
           '_clave': pass,
           '_recordar': "S",
@@ -70,28 +69,25 @@ class GaurController {
           '_device_id': "64235997dc003f48"
         },
         );
-      } on http.ClientException catch (_) {
-        return GaurResponse.connectionError;
-      }
-    if (response.headers.containsKey("auth-token")) {
+        if (!response.headers.containsKey("auth-token")) {
+          final body = jsonDecode(response.body);
+          if (body["alertaError"] == "Clave incorrecta") {
+            return GaurLoginResponse.wrongPassword;
+          }
+          if (body["alertaError"] == "Usuario incorrecto") {
+            return GaurLoginResponse.userNotFound;
+          }
+        }
       _authToken = response.headers['auth-token']!;
       profile = await _buildProfile(response);
+      } on http.ClientException catch (_) {
+        return GaurLoginResponse.connectionError;
+      }
       setExpediente(0);
       _storage.write(key: 'ldap', value: ldap);
       _storage.write(key: 'password', value: pass);
-      return GaurResponse.ok;
-    } else {
-      final body = jsonDecode(response.body);
-      if (body["alertaError"] == "Clave incorrecta") {
-        return GaurResponse.wrongPassword;
-      }
-      if (body["alertaError"] == "Usuario incorrecto") {
-        return GaurResponse.userNotFound;
-      }
+      return GaurLoginResponse.ok;
     }
-    //TODO: Esto debería logearse en algún sitio
-    return GaurResponse.connectionError;
-  }
   
   Future<UserProfile> _buildProfile(http.Response loginResponse) async {
     var body = jsonDecode(loginResponse.body);
@@ -101,8 +97,8 @@ class GaurController {
     if (body["foto"] != null) {
       foto = body["foto"];
     }
-    http.Response? response = await http.post(
-      Uri.parse('$_url/expedientes/getExpedientesByIdp'),
+    http.Response response = await GlobalData.client.post(
+      Uri.parse('${GlobalData.url}/expedientes/getExpedientesByIdp'),
       headers: {
         'auth-token': _authToken!,
         'Accept': '*/*'

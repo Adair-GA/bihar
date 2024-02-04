@@ -14,7 +14,7 @@ class _SplashPageState extends State<SplashPage> {
     super.initState();
     GaurController().login(null, null).then((value) => 
     {
-      if (value == GaurResponse.ok) {
+      if (value == GaurLoginResponse.ok) {
         Navigator.of(context).pushReplacementNamed('/home')
       } else {
         Navigator.of(context).pushReplacementNamed('/login')

@@ -100,14 +100,14 @@ class _LoginState extends State<Login> {
           }
           _loginformKey.currentState!.save();
           switch (await GaurController().login(_ldap!, _password!)) {
-            case GaurResponse.ok:
+            case GaurLoginResponse.ok:
               Navigator.of(context).pushReplacementNamed('/home');
               break;
-            case GaurResponse.connectionError:
+            case GaurLoginResponse.connectionError:
               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Error de conexión')));
               break;
-            case GaurResponse.userNotFound:
-            case GaurResponse.wrongPassword:
+            case GaurLoginResponse.userNotFound:
+            case GaurLoginResponse.wrongPassword:
               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Credenciales incorrectas')));
               break;
             default:
