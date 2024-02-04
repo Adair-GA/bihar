@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:basic_utils/basic_utils.dart';
-import 'package:bihar/model/gaur_controller.dart';
+import 'package:bihar/controller/gaur_controller.dart';
 import 'package:bihar/model/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:text_scroll/text_scroll.dart';

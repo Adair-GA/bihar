@@ -1,4 +1,4 @@
-import 'package:bihar/model/gaur_controller.dart';
+import 'package:bihar/controller/gaur_controller.dart';
 import 'package:bihar/routes/home.dart';
 import 'package:bihar/routes/timetable.dart';
 import 'package:flutter/material.dart';
