@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:bihar/login.dart';
 import 'package:bihar/homepage.dart';
 import 'package:bihar/splashpage.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
+  initializeDateFormatting();
   await GaurController().init();
   runApp(const MyApp());
 }
@@ -16,13 +18,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      locale: const Locale('es', 'ES'),
       theme: ThemeData(),
       darkTheme: ThemeData.dark(),
       home: SplashPage(),
       routes: <String, WidgetBuilder>{
         "/splash":(context) => SplashPage(),
         '/home': (context) => HomePage(),
-        '/login': (context) => Login(),
+        '/login': (context) => const Login(),
       }
     );
   }

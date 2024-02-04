@@ -1,8 +1,10 @@
+import 'package:bihar/controller/timetable_controller.dart';
+import 'package:bihar/model/dia.dart';
 import 'package:flutter/material.dart';
 
 class TimeTable extends StatefulWidget {
   const TimeTable({Key? key}) : super(key: key);
-  
+
   @override
   _TimeTableState createState() => _TimeTableState();
 }
@@ -10,19 +12,78 @@ class TimeTable extends StatefulWidget {
 class _TimeTableState extends State<TimeTable> {
   DateTime selectedDate = DateUtils.dateOnly(DateTime.now());
   TextEditingController dateCtl = TextEditingController();
+  DateTimeRange? available;
+  Future<Dia>? _day;
+
+  @override
+  void initState() {
+    super.initState();
+    dateCtl.text = "${selectedDate.toLocal()}".split(' ')[0];
+    TimetableController().getAvailable().then((value) => 
+      setState(() {
+        available = value;
+      })
+    );
+  }
 
 
   @override
   Widget build(BuildContext context) {
-    dateCtl.text = "${selectedDate.toLocal()}".split(' ')[0];
+    _day = TimetableController().getDay(selectedDate);
     return Column(
       children: [
-        Row(
+        _buildDatePicker(),
+        const Divider(),
+        _buildTable(),
+      ],
+    );
+  }
+
+  Widget _buildTable() {
+    return FutureBuilder(
+      future: _day,
+      builder: (BuildContext context, AsyncSnapshot<Dia> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        }
+        if (snapshot.hasError) {
+          return Text("Error: ${snapshot.error}");
+        }
+        if (snapshot.hasData) {
+          return _buildDayTable(snapshot.data!);
+        }
+        return const Text("Error desconocido");
+      },
+    );
+  }
+
+  Widget _buildDayTable(Dia day) {
+    return Table(
+      border: TableBorder.all(),
+      children: [
+        TableRow(
           children: [
-            const IconButton(
-              icon: Icon(Icons.arrow_back_ios),
-              // onPressed: expediente > 1 ? () => setState(() {expediente--; GaurController().setExpediente(expediente - 1);} ) : null,
-              onPressed: null,
+            Text("Hora"),
+            Text("Clase"),
+          ]
+        ),
+        for (var clase in day.clases)
+          TableRow(
+            children: [
+              Text(clase.aula),
+              Text(clase.nombreAsignatura),
+            ]
+          )
+      ],
+    );
+  }
+  
+  Widget _buildDatePicker() {
+    return Row(
+          children: [
+            IconButton(
+              icon: const Icon(Icons.arrow_back_ios),
+              onPressed: _getOnPressed(selectedDate, true) as void Function()?,
             ),
             Expanded(
               child: Padding(
@@ -40,8 +101,10 @@ class _TimeTableState extends State<TimeTable> {
                     final DateTime? picked = await showDatePicker(
                       context: context,
                       initialDate: selectedDate,
-                      firstDate: DateTime(2015, 8),
-                      lastDate: DateTime(2101),
+                      firstDate: available!.start,
+                      lastDate: available!.end,
+                      // locale: const Locale("es", "ES"),
+
                     );
                     if (picked != null && picked != selectedDate){
                       setState(() {
@@ -54,30 +117,39 @@ class _TimeTableState extends State<TimeTable> {
                 ),
               ),
             ),
-            const IconButton(
-              icon: Icon(Icons.arrow_forward_ios),
-              // onPressed: expediente < cantExpedientes ? () => setState(() {expediente++; GaurController().setExpediente(expediente - 1);})  : null,
-              onPressed: null,
+            IconButton(
+              icon: const Icon(Icons.arrow_forward_ios),
+              onPressed:  _getOnPressed(selectedDate, false) as void Function()?,
             ),
           ],
-          ),
-        const Divider(),
-        _buildTable(),
-      ],
-    );
+        );
   }
-
-  Widget _buildTable() {
-    return Table(
-      border: TableBorder.all(),
-      children: [
-        TableRow(
-          children: [
-            Text("Hora"),
-            Text("Clase"),
-          ]
-        )
-      ],
-    );
+  
+  Function? _getOnPressed(DateTime date, bool left) {
+    if (available == null) {
+      return null;
+    }
+    switch (left){
+      case true:
+        if (date.subtract(const Duration(days: 1)).isBefore(available!.start)) {
+          return null;
+        }
+        else {
+          return () => setState(() {
+            selectedDate = date.subtract(const Duration(days: 1));
+            dateCtl.text = "${selectedDate.toLocal()}".split(' ')[0];
+          });
+        }
+      case false:
+        if (date.add(const Duration(days: 1)).isAfter(available!.end)) {
+          return null;
+        }
+        else {
+          return () => setState(() {
+            selectedDate = date.add(const Duration(days: 1));
+            dateCtl.text = "${selectedDate.toLocal()}".split(' ')[0];
+          });
+        }
+    }
   }
 }
