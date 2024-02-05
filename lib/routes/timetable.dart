@@ -63,29 +63,7 @@ class _TimeTableState extends State<TimeTable> {
     return Column(
       children: [
         for (var clase in day.clases)
-          getItem(clase)
-      ],
-    );
-
-    return Table(
-      // border: TableBorder.all()
-      columnWidths: const{
-        0: FractionColumnWidth(.2)
-      },
-      children: [
-        const TableRow(
-          children: [
-            Text("Hora"),
-            Text("Clase"),
-          ]
-        ),
-        for (var clase in day.clases)
-          TableRow(
-            children: [
-              Text(_getHora(clase.horaComienzo)),
-              Text(clase.nombreAsignatura),
-            ]
-          )
+          getItem(clase),
       ],
     );
   }
@@ -178,8 +156,9 @@ class _TimeTableState extends State<TimeTable> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(5, 2 , 0 ,2),
+            Flexible(
+              flex: 3,
+              fit: FlexFit.tight,
               child: Column(
                 children: [
                   Text(_getHora(clase.horaComienzo)),
@@ -188,26 +167,32 @@ class _TimeTableState extends State<TimeTable> {
                 ],
               ),
             ),
-            Expanded(
+            Flexible(
+              flex: 16,
+              fit: FlexFit.tight,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(clase.nombreAsignatura, style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
-                    Text(clase.tipo + clase.grupo, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),)
+                    Text(clase.nombreAsignatura, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis,),
+                    Text(clase.getDesc(), style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w100),)
                   ],
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(clase.aula)
-                ],
+            Flexible(
+              flex: 4,
+              fit: FlexFit.tight,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(clase.aula),
+                  ],
+                ),
               ),
             )
           ],
