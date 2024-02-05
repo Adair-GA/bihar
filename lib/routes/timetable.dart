@@ -1,6 +1,8 @@
 import 'package:bihar/controller/timetable_controller.dart';
+import 'package:bihar/model/clase.dart';
 import 'package:bihar/model/dia.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class TimeTable extends StatefulWidget {
   const TimeTable({Key? key}) : super(key: key);
@@ -57,11 +59,21 @@ class _TimeTableState extends State<TimeTable> {
     );
   }
 
-  Widget _buildDayTable(Dia day) {
-    return Table(
-      border: TableBorder.all(),
+  Widget _buildDayTable(Dia day) { 
+    return Column(
       children: [
-        TableRow(
+        for (var clase in day.clases)
+          getItem(clase)
+      ],
+    );
+
+    return Table(
+      // border: TableBorder.all()
+      columnWidths: const{
+        0: FractionColumnWidth(.2)
+      },
+      children: [
+        const TableRow(
           children: [
             Text("Hora"),
             Text("Clase"),
@@ -70,12 +82,17 @@ class _TimeTableState extends State<TimeTable> {
         for (var clase in day.clases)
           TableRow(
             children: [
-              Text(clase.aula),
+              Text(_getHora(clase.horaComienzo)),
               Text(clase.nombreAsignatura),
             ]
           )
       ],
     );
+  }
+
+  String _getHora(DateTime time){
+    DateFormat fm = DateFormat("kk:mm");
+    return fm.format(time); 
   }
   
   Widget _buildDatePicker() {
@@ -151,5 +168,50 @@ class _TimeTableState extends State<TimeTable> {
           });
         }
     }
+  }
+
+  Widget getItem(Clase clase){
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(colors: [Colors.red, Colors.blue])
+      ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(5, 2 , 0 ,2),
+              child: Column(
+                children: [
+                  Text(_getHora(clase.horaComienzo)),
+                  const Text(" | "),
+                  Text(_getHora(clase.horaFin)),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(clase.nombreAsignatura, style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
+                    Text(clase.tipo + clase.grupo, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),)
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(clase.aula)
+                ],
+              ),
+            )
+          ],
+        ),
+      );
   }
 }
