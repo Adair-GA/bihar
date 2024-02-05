@@ -65,15 +65,18 @@ class _HomeState extends State<Home> {
                   fit: BoxFit.cover,
                 ).image,
                 ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.end,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(StringUtils.capitalize(profile.nombre, allWords: true), style: const TextStyle(fontSize: 20)),
-                  Text(profile.dni, style: const TextStyle(fontSize: 15)),
-                  Text(profile.expedientes[expediente-1].facultad, style: const TextStyle(fontSize: 15))
-                ],
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(StringUtils.capitalize(profile.nombre, allWords: true), style: const TextStyle(fontSize: 20)),
+                    Text(profile.dni, style: const TextStyle(fontSize: 15)),
+                    Text(profile.expedientes[expediente-1].facultad, style: const TextStyle(fontSize: 15))
+                  ],
+                ),
               ),
             ],
           ),
