@@ -1,4 +1,4 @@
-import 'package:bihar/controller/gaur_controller.dart';
+import 'package:bihar/controller/login_data.dart';
 import 'package:flutter/material.dart';
 import 'package:bihar/login.dart';
 import 'package:bihar/homepage.dart';
@@ -9,7 +9,7 @@ import 'package:intl/date_symbol_data_local.dart';
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   initializeDateFormatting();
-  await GaurController().init();
+  await LoginData.init();
   runApp(const MyApp());
 }
 class MyApp extends StatelessWidget {

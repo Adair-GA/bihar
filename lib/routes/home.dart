@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:basic_utils/basic_utils.dart';
-import 'package:bihar/controller/gaur_controller.dart';
+import 'package:bihar/controller/profile_controller.dart';
 import 'package:bihar/model/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:text_scroll/text_scroll.dart';
@@ -27,12 +27,12 @@ class _HomeState extends State<Home> {
             if (cantExpedientes > 1)
               IconButton(
                 icon: const Icon(Icons.arrow_back_ios),
-                onPressed: expediente > 1 ? () => setState(() {expediente--; GaurController().setExpediente(expediente - 1);} ) : null,
+                onPressed: expediente > 1 ? () => setState(() {expediente--; ProfileController().setExpediente(expediente - 1);} ) : null,
               ),
             Expanded(child: Center(child: Padding(
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
               child: TextScroll(
-                "${GaurController().profile!.expedientes[expediente-1].grado}.",
+                "${ProfileController().profile!.expedientes[expediente-1].grado}.",
                 intervalSpaces: 20,
                 style: const TextStyle(fontSize: 15),
                 velocity: const Velocity(pixelsPerSecond: Offset(50, 0),
@@ -41,7 +41,7 @@ class _HomeState extends State<Home> {
             if (cantExpedientes > 1)
               IconButton(
                 icon: const Icon(Icons.arrow_forward_ios),
-                onPressed: expediente < cantExpedientes ? () => setState(() {expediente++; GaurController().setExpediente(expediente - 1);})  : null,
+                onPressed: expediente < cantExpedientes ? () => setState(() {expediente++; ProfileController().setExpediente(expediente - 1);})  : null,
               ),
           ],
           ),
@@ -51,7 +51,7 @@ class _HomeState extends State<Home> {
   }
 
   Widget _profile(BuildContext context){
-    UserProfile profile = GaurController().profile!;
+    UserProfile profile = ProfileController().profile!;
     cantExpedientes = profile.expedientes.length;
     return  Padding(
       padding: const EdgeInsets.all(8.0),

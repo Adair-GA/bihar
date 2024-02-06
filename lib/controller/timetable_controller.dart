@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:bihar/controller/gaur_controller.dart';
-import 'package:bihar/controller/global_data.dart';
+import 'package:bihar/controller/profile_controller.dart';
+import 'package:bihar/controller/login_data.dart';
 import 'package:bihar/model/dia.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -14,16 +14,19 @@ class TimetableController {
   DateTimeRange? _available;
 
   Future<DateTimeRange> getAvailable() async {
-    Response response = await GlobalData.client.post(
-      Uri.parse("${GlobalData.url}$_endpoint/getFechasConsulta"),
+    Response response = await LoginData.client.post(
+      Uri.parse("${LoginData.url}$_endpoint/getFechasConsulta"),
       headers: {
-        "auth-token": GlobalData.authToken!
+        "auth-token": LoginData.authToken!
       },
       body: {
-        "_numExpediente": GaurController().expedienteActivo!.numExpediente
+        "_numExpediente": ProfileController().expedienteActivo!.numExpediente
       }
       );
     if (response.statusCode != 200) {
+      if (response.statusCode == 401){
+        throw TokenExpiredException();  
+      }
       throw Exception("Error al obtener las fechas disponibles");
     }
     Map<String, dynamic> body = jsonDecode(response.body);
@@ -39,12 +42,12 @@ class TimetableController {
     if (day.isAfter(_available!.end) || day.isBefore(_available!.start)) {
       throw Exception("La fecha $day no está disponible");
     }
-    String numExp = GaurController().expedienteActivo!.numExpediente;
-    String url = "${GlobalData.url}$_endpoint/getHorario";
-    Response response = await GlobalData.client.post(
+    String numExp = ProfileController().expedienteActivo!.numExpediente;
+    String url = "${LoginData.url}$_endpoint/getHorario";
+    Response response = await LoginData.client.post(
       Uri.parse(url),
       headers: {
-        "auth-token": GlobalData.authToken!
+        "auth-token": LoginData.authToken!
       },
       body: {
         "_numExpediente": numExp,
@@ -52,6 +55,9 @@ class TimetableController {
         "_enMediasHoras": "N"
       });
     if (response.statusCode != 200) {
+      if (response.statusCode == 401){
+        throw TokenExpiredException();  
+      }
       throw Exception("Error al obtener el horario del día $day");
     }
     return Dia.fromJson(jsonDecode(response.body));
