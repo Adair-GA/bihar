@@ -16,7 +16,7 @@ class _TimeTableState extends State<TimeTable> {
   TextEditingController dateCtl = TextEditingController();
   DateTimeRange? available;
   Future<Dia>? _day;
-  final DateFormat _fmt = DateFormat("E d/M/y", "es_ES");
+  final DateFormat _fmt = DateFormat.yMEd();
 
   @override
   void initState() {
@@ -102,7 +102,8 @@ class _TimeTableState extends State<TimeTable> {
                       initialDate: selectedDate,
                       firstDate: available!.start,
                       lastDate: available!.end,
-                      locale: const Locale("es", "ES"),
+                      // locale: const Locale("es", "ES"),
+                      // locale: const Locale("eu", "ES"),
                     );
                     if (picked != null && picked != selectedDate){
                       setState(() {

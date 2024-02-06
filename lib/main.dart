@@ -5,11 +5,13 @@ import 'package:bihar/homepage.dart';
 import 'package:bihar/splashpage.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   initializeDateFormatting();
+  Intl.defaultLocale = 'es_ES';
   await LoginData.init();
   runApp(const MyApp());
 }
@@ -21,7 +23,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       locale: const Locale('es', 'ES'),
       supportedLocales: {
-        const Locale('es', 'ES')
+        const Locale('es', 'ES'),
+        const Locale("eu", "ES")
       },
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
