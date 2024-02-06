@@ -99,8 +99,8 @@ class _LoginState extends State<Login> {
           if (!_loginformKey.currentState!.validate()) {
             return;
           }
-          LoginData.setCredentials(_ldap!, _password!);
           _loginformKey.currentState!.save();
+          LoginData.setCredentials(_ldap!, _password!);
           switch (await ProfileController().login()) {
             case LoginResponse.ok:
               Navigator.of(context).pushReplacementNamed('/home');

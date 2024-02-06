@@ -40,6 +40,7 @@ class ProfileController {
       return LoginResponse.invalidCredentials;
     }
     profile = await _buildProfile(body);
+    setExpediente(0);
     return LoginResponse.ok;
   }
   

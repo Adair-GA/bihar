@@ -150,8 +150,8 @@ class _TimeTableState extends State<TimeTable> {
 
   Widget getItem(Clase clase){
     return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(colors: [Colors.red, Colors.blue])
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(colors: [Color.fromARGB(255, 48, 144, 168), Color.fromARGB(255, 172, 14, 245)])
       ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

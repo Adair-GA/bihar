@@ -21,10 +21,10 @@ class MyApp extends StatelessWidget {
       locale: const Locale('es', 'ES'),
       theme: ThemeData(),
       darkTheme: ThemeData.dark(),
-      home: SplashPage(),
+      home: const SplashPage(),
       routes: <String, WidgetBuilder>{
-        "/splash":(context) => SplashPage(),
-        '/home': (context) => HomePage(),
+        "/splash":(context) => const SplashPage(),
+        '/home': (context) => const HomePage(),
         '/login': (context) => const Login(),
       }
     );

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:bihar/controller/login_data.dart';
+import 'package:bihar/controller/profile_controller.dart';
 import 'package:http/http.dart';
 
 class GaurClient{
@@ -48,7 +49,48 @@ class GaurClient{
     return jsonDecode(response.body);
   }
 
-  
+  Future<dynamic> getFechasConsulta() async {
+    Response response = await _client.post(
+      Uri.parse("$_url/horarios/getFechasConsulta"),
+      headers: {
+        "auth-token": _authToken!
+      },
+      body: {
+        "_numExpediente": ProfileController().expedienteActivo!.numExpediente
+      }
+      );
+    if (response.statusCode != 200) {
+      if (response.statusCode == 401){
+        throw TokenExpiredException();  
+      }
+      throw Exception("Error al obtener las fechas disponibles");
+    }
+    return jsonDecode(response.body);
+  }
+
+
+  Future<dynamic> getHorario(DateTime day) async {
+    String numExp = ProfileController().expedienteActivo!.numExpediente;
+    String url = "$_url/horarios/getHorario";
+    Response response = await _client.post(
+      Uri.parse(url),
+      headers: {
+        "auth-token": _authToken!
+      },
+      body: {
+        "_numExpediente": numExp,
+        "_fecha": day.toIso8601String().substring(0, 10),
+        "_enMediasHoras": "N"
+      });
+    if (response.statusCode != 200) {
+      if (response.statusCode == 401){
+        throw TokenExpiredException();  
+      }
+      throw Exception("Error al obtener el horario del día $day");
+    }
+    _authToken = response.headers["auth-token"];
+    return (jsonDecode(response.body));
+  }
 
   void logout(){
     _authToken = null;

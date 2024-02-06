@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 
 class HomePage extends StatefulWidget {
-  HomePage({super.key});
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -63,11 +63,11 @@ class _HomePageState extends State<HomePage> {
   Widget getBody(BuildContext context){
     switch(index){
       case 0:
-        return Home();
+        return const Home();
       case 1:
-        return TimeTable();
+        return const TimeTable();
       default:
-        return Home();
+        return const Home();
     }
   }
 }
