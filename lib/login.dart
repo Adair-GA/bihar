@@ -113,7 +113,7 @@ class _LoginState extends State<Login> {
               break;
             default:
               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Error desconocido', style: TextStyle(color: Colors.white)), backgroundColor: Colors.red));
-        }
+          }
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),

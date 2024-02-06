@@ -16,11 +16,11 @@ class _TimeTableState extends State<TimeTable> {
   TextEditingController dateCtl = TextEditingController();
   DateTimeRange? available;
   Future<Dia>? _day;
+  final DateFormat _fmt = DateFormat("E d/M/y", "es_ES");
 
   @override
   void initState() {
     super.initState();
-    dateCtl.text = "${selectedDate.toLocal()}".split(' ')[0];
     TimetableController().getAvailable().then((value) => 
       setState(() {
         available = value;
@@ -31,6 +31,7 @@ class _TimeTableState extends State<TimeTable> {
 
   @override
   Widget build(BuildContext context) {
+    dateCtl.text = _fmt.format(selectedDate);
     _day = TimetableController().getDay(selectedDate);
     return Column(
       children: [
@@ -59,7 +60,10 @@ class _TimeTableState extends State<TimeTable> {
     );
   }
 
-  Widget _buildDayTable(Dia day) { 
+  Widget _buildDayTable(Dia day) {
+    if (day.clases.isEmpty){
+      return empty();
+    }
     return Column(
       children: [
         for (var clase in day.clases)
@@ -98,13 +102,11 @@ class _TimeTableState extends State<TimeTable> {
                       initialDate: selectedDate,
                       firstDate: available!.start,
                       lastDate: available!.end,
-                      // locale: const Locale("es", "ES"),
-
+                      locale: const Locale("es", "ES"),
                     );
                     if (picked != null && picked != selectedDate){
                       setState(() {
                         selectedDate = picked;
-                        dateCtl.text = "${picked.toLocal()}".split(' ')[0];
                       }
                       );
                     }
@@ -119,7 +121,6 @@ class _TimeTableState extends State<TimeTable> {
           ],
         );
   }
-  
   Function? _getOnPressed(DateTime date, bool left) {
     if (available == null) {
       return null;
@@ -132,7 +133,6 @@ class _TimeTableState extends State<TimeTable> {
         else {
           return () => setState(() {
             selectedDate = date.subtract(const Duration(days: 1));
-            dateCtl.text = "${selectedDate.toLocal()}".split(' ')[0];
           });
         }
       case false:
@@ -142,7 +142,6 @@ class _TimeTableState extends State<TimeTable> {
         else {
           return () => setState(() {
             selectedDate = date.add(const Duration(days: 1));
-            dateCtl.text = "${selectedDate.toLocal()}".split(' ')[0];
           });
         }
     }
@@ -198,5 +197,22 @@ class _TimeTableState extends State<TimeTable> {
           ],
         ),
       );
+  }
+  
+  Widget empty() {
+    return Center(
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Text("No tienes clase este dia!", style: TextStyle(
+              color: Theme.of(context).colorScheme.onBackground,
+              fontSize: 20
+            ),),
+          ),
+          Image.asset("assets/img/day_off.png"),
+        ],
+      )
+    );
   }
 }
