@@ -58,6 +58,7 @@ class ProfileController {
           body[i]["numExpediente"],
           body[i]["descCentro"],
           body[i]["descPlan"],
+          body[i]["codPlan"],
           body[i]["estadoExpediente"] == "Abierto"
         ));
     }
