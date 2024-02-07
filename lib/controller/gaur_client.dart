@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:bihar/controller/login_data.dart';
 import 'package:bihar/controller/profile_controller.dart';
 import 'package:http/http.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class TokenExpiredException implements Exception{
 }
@@ -11,7 +12,7 @@ class TokenExpiredException implements Exception{
 class GaurClient{
   // static const String _url = "https://aa4ee609-656b-4a43-bb77-cd47683986d8.mock.pstmn.io/gaurMovilRS/rest";
   static const String _url = "https://gestion-servicios.ehu.es/gaurMovilRS/rest";
-  final Client _client = Client();
+  final Client _client = SentryHttpClient();
   String? _authToken;
 
   static final GaurClient _instance = GaurClient._internal();
@@ -34,21 +35,20 @@ class GaurClient{
         await login();
         tries+=1;
       }
-      on ClientException catch (e, trace){
+      on ClientException{
         tries+=1;
-        if (tries == 4){
-          //TODO: Log a sentry
-        }
       }
     }
-    //TODO: Loguear esto tambíen
-    throw Exception("No se ha podido realizar la conexión al servidor");
+    final ex = Exception("No se ha podido realizar la conexión al servidor");
+    Sentry.captureException(ex);
+    throw ex;
   }
   
   Future<dynamic> login() async{
     if (LoginData.ldap == null || LoginData.pass == null){
-      //TODO: Esto no deberia pasar nunca pero habría que loguearlo
-      throw Exception("No hay credenciales");
+      final ex = Exception("No hay credenciales");
+      Sentry.captureException(ex);
+      throw ex;
     }
     Response response = await _client.post(
       Uri.parse("$_url/login/doLogin"),
