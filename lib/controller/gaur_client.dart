@@ -4,6 +4,10 @@ import 'package:bihar/controller/login_data.dart';
 import 'package:bihar/controller/profile_controller.dart';
 import 'package:http/http.dart';
 
+class TokenExpiredException implements Exception{
+}
+
+
 class GaurClient{
   // static const String _url = "https://aa4ee609-656b-4a43-bb77-cd47683986d8.mock.pstmn.io/gaurMovilRS/rest";
   static const String _url = "https://gestion-servicios.ehu.es/gaurMovilRS/rest";
@@ -14,6 +18,32 @@ class GaurClient{
   factory GaurClient() => _instance;
 
   GaurClient._internal();
+
+  Future<Response> post(Uri uri, {Map<String, String>? body, Map<String, String>? headers}) async{
+    int tries = 0;
+    while(tries < 4){
+      try{
+        Response resp = await _client.post(uri, headers: headers, body: body);
+        if (resp.statusCode == 401){
+          throw TokenExpiredException();
+        }
+        _authToken = resp.headers["auth-token"];
+        return resp;
+      }
+      on TokenExpiredException{
+        await login();
+        tries+=1;
+      }
+      on ClientException catch (e, trace){
+        tries+=1;
+        if (tries == 4){
+          //TODO: Log a sentry
+        }
+      }
+    }
+    //TODO: Loguear esto tambíen
+    throw Exception("No se ha podido realizar la conexión al servidor");
+  }
   
   Future<dynamic> login() async{
     if (LoginData.ldap == null || LoginData.pass == null){
@@ -34,7 +64,7 @@ class GaurClient{
     if (!response.headers.containsKey("auth-token")) {
       return null;
     }
-    _authToken = response.headers['auth-token'];
+    _authToken = response.headers["auth-token"];
     return body;
   }
 
@@ -50,7 +80,7 @@ class GaurClient{
   }
 
   Future<dynamic> getFechasConsulta() async {
-    Response response = await _client.post(
+    Response response = await post(
       Uri.parse("$_url/horarios/getFechasConsulta"),
       headers: {
         "auth-token": _authToken!
@@ -58,13 +88,7 @@ class GaurClient{
       body: {
         "_numExpediente": ProfileController().expedienteActivo!.numExpediente
       }
-      );
-    if (response.statusCode != 200) {
-      if (response.statusCode == 401){
-        throw TokenExpiredException();  
-      }
-      throw Exception("Error al obtener las fechas disponibles");
-    }
+    );
     return jsonDecode(response.body);
   }
 
@@ -72,7 +96,7 @@ class GaurClient{
   Future<dynamic> getHorario(DateTime day) async {
     String numExp = ProfileController().expedienteActivo!.numExpediente;
     String url = "$_url/horarios/getHorario";
-    Response response = await _client.post(
+    Response response = await post(
       Uri.parse(url),
       headers: {
         "auth-token": _authToken!
@@ -81,14 +105,7 @@ class GaurClient{
         "_numExpediente": numExp,
         "_fecha": day.toIso8601String().substring(0, 10),
         "_enMediasHoras": "N"
-      });
-    if (response.statusCode != 200) {
-      if (response.statusCode == 401){
-        throw TokenExpiredException();  
-      }
-      throw Exception("Error al obtener el horario del día $day");
-    }
-    _authToken = response.headers["auth-token"];
+    });
     return (jsonDecode(response.body));
   }
 

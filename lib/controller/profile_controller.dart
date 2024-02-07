@@ -12,9 +12,6 @@ enum LoginResponse{
   invalidCredentials
 }
 
-class TokenExpiredException implements Exception{
-}
-
 class ProfileController {
   static final ProfileController _instance = ProfileController._internal(); 
   UserProfile? profile;
