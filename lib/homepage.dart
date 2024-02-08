@@ -1,5 +1,6 @@
 import 'package:bihar/controller/profile_controller.dart';
 import 'package:bihar/routes/home.dart';
+import 'package:bihar/routes/notas.dart';
 import 'package:bihar/routes/timetable.dart';
 import 'package:flutter/material.dart';
 
@@ -49,6 +50,11 @@ class _HomePageState extends State<HomePage> {
             selectedIcon: Icon(Icons.table_rows),
             icon: Icon(Icons.table_rows_outlined),
             label: 'Horario',
+          ),
+          NavigationDestination(
+            selectedIcon: Icon(Icons.mail),
+            icon: Icon(Icons.mail_outlined),
+            label: 'Notas',
           )
       ],
     ),
@@ -66,6 +72,8 @@ class _HomePageState extends State<HomePage> {
         return const Home();
       case 1:
         return const TimeTable();
+      case 2:
+        return const Notas();
       default:
         return const Home();
     }
