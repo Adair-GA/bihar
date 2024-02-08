@@ -8,7 +8,7 @@ class TimeTable extends StatefulWidget {
   const TimeTable({Key? key}) : super(key: key);
 
   @override
-  _TimeTableState createState() => _TimeTableState();
+  State<TimeTable> createState() => _TimeTableState();
 }
 
 class _TimeTableState extends State<TimeTable> {
@@ -148,6 +148,7 @@ class _TimeTableState extends State<TimeTable> {
     }
   }
 
+  //TODO: hacer esto con OpenContainer de animations
   Widget getItem(Clase clase){
     return Container(
       decoration: const BoxDecoration(
