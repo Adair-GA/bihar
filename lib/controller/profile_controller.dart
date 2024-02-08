@@ -56,6 +56,7 @@ class ProfileController {
           body[i]["descCentro"],
           body[i]["descPlan"],
           body[i]["codPlan"],
+          int.parse(body[i]["tipoEnsenanza"]),
           body[i]["estadoExpediente"] == "Abierto"
         ));
     }
