@@ -58,8 +58,9 @@ class ProfileController {
           body[i]["numExpediente"],
           body[i]["descCentro"],
           body[i]["descPlan"],
-          body[i]["estadoExpediente"] == "Abierto",
           body[i]["codPlan"],
+          int.parse(body[i]["tipoEnsenanza"]),
+          body[i]["estadoExpediente"] == "Abierto"
         ));
     }
     return UserProfile(nombre, dni, foto, expedientes);
