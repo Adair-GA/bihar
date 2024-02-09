@@ -57,9 +57,9 @@ class _LoginState extends State<Login> {
                   if (int.tryParse(value) == null) {
                     return 'El LDAP solo son números';
                   }
-                  if (value.length != 7) {
-                    return 'El LDAP tiene que tener 7 dígitos';
-                  }
+                  // if (value.length != 7) {
+                  //   return 'El LDAP tiene que tener 7 dígitos';
+                  // }
                   return null;
                 },
                 onSaved: (newValue) => _ldap = newValue,
