@@ -18,6 +18,12 @@ class _HomeState extends State<Home> {
   int cantExpedientes = 0;
 
   @override
+  void initState(){
+    expediente = 1 + ProfileController().indexExpedienteActivo;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [

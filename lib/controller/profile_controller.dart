@@ -16,6 +16,7 @@ class ProfileController {
   static final ProfileController _instance = ProfileController._internal(); 
   UserProfile? profile;
   Expediente? expedienteActivo;
+  int indexExpedienteActivo = 0;
 
 
   factory ProfileController() => _instance;
@@ -63,6 +64,7 @@ class ProfileController {
 
   void setExpediente(int index) {
     expedienteActivo = profile!.expedientes[index];
+    indexExpedienteActivo = index;
   }
 
   void logout(){
