@@ -62,7 +62,8 @@ class _HomeState extends State<Home> {
     return  Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
-        children: [Row(
+        children: [
+          Row(
             children: [
               CircleAvatar(
                 radius: 50,
@@ -70,18 +71,20 @@ class _HomeState extends State<Home> {
                   base64Decode(profile.foto!),
                   fit: BoxFit.cover,
                 ).image,
-                ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(StringUtils.capitalize(profile.nombre, allWords: true), style: const TextStyle(fontSize: 20)),
-                    Text(profile.dni, style: const TextStyle(fontSize: 15)),
-                    Text(profile.expedientes[expediente-1].facultad, style: const TextStyle(fontSize: 15))
-                  ],
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(StringUtils.capitalize(profile.nombre, allWords: true), style: const TextStyle(fontSize: 20)),
+                      Text(profile.dni, style: const TextStyle(fontSize: 15)),
+                      Text(profile.expedientes[expediente-1].facultad, style: const TextStyle(fontSize: 15))
+                    ],
+                  ),
                 ),
               ),
             ],
