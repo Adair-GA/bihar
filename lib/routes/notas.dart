@@ -1,5 +1,6 @@
 import 'package:bihar/controller/notas_controller.dart';
 import 'package:bihar/model/nota_provisional.dart';
+import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 
 class Notas extends StatefulWidget {
@@ -26,7 +27,7 @@ class _NotasState extends State<Notas> {
             return buildList(snapshot.data!);
           }
         }
-        return const CircularProgressIndicator();
+        return const Center(child: CircularProgressIndicator());
       }
     );
   }
@@ -48,16 +49,33 @@ class _NotasState extends State<Notas> {
       )
     );
     }
-    return ListView.builder(itemCount: data.length, itemBuilder: 
-            (BuildContext context, int index){
-              return ListTile(
+    return ListView.builder(
+      itemCount: data.length, 
+      itemBuilder: (BuildContext context, int index){
+        return Column(
+          children: [
+            ExpandablePanel(
+              theme: ExpandableThemeData(
+                iconColor: Theme.of(context).colorScheme.onBackground,
+              ),
+              header: ListTile(
                 title: Text(data[index].descAsignatura!),
                 subtitle: Text(data[index].descConvocatoria),
-                trailing: Text(data[index].nota.toString()),
-              );
-            }
-          );
+              ),
+              collapsed: ListTile(
+                trailing: Text("F. Revisión: ${data[index].fechaRevision?? ""} ${data[index].horarioRevision?? ""}"),
+                title: Text("Nota: ${data[index].nota?? "No disponible"}"),
+              ),
+              expanded: ListTile(
+                isThreeLine: true,
+                title: Text("Nota: ${data[index].nota?? "No disponible"}"),
+                subtitle: Text("Lugar: ${data[index].lugarRevision ?? ""}"),
+              )
+            ),
+            const Divider(),
+          ],
+        );
+      }
+    );
   }
-
-
 }
