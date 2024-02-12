@@ -23,19 +23,41 @@ class _NotasState extends State<Notas> {
             return Text("Error: ${snapshot.error}");
           }
           if (snapshot.hasData){
-            return ListView.builder(itemCount: snapshot.data!.length, itemBuilder: 
-              (BuildContext context, int index){
-                return ListTile(
-                  title: Text(snapshot.data![index].descAsignatura!),
-                  subtitle: Text(snapshot.data![index].descConvocatoria),
-                  trailing: Text(snapshot.data![index].nota.toString()),
-                );
-              }
-            );
+            return buildList(snapshot.data!);
           }
         }
-        return CircularProgressIndicator();
+        return const CircularProgressIndicator();
       }
     );
   }
+
+  Widget buildList(List<NotaProvisional> data) {
+    if (data.isEmpty){
+      return Center(
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Text("No tienes notas provisionales", style: TextStyle(
+              color: Theme.of(context).colorScheme.onBackground,
+              fontSize: 20
+            ),),
+          ),
+          Image.asset("assets/img/no_marks.png"),
+        ],
+      )
+    );
+    }
+    return ListView.builder(itemCount: data.length, itemBuilder: 
+            (BuildContext context, int index){
+              return ListTile(
+                title: Text(data[index].descAsignatura!),
+                subtitle: Text(data[index].descConvocatoria),
+                trailing: Text(data[index].nota.toString()),
+              );
+            }
+          );
+  }
+
+
 }
