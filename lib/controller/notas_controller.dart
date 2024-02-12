@@ -1,3 +1,6 @@
+import 'package:bihar/controller/gaur_client.dart';
+import 'package:bihar/model/nota_provisional.dart';
+
 class NotasController{
   static final NotasController _instance = NotasController._internal(); 
   factory NotasController() => _instance;
@@ -12,4 +15,41 @@ class NotasController{
   //todos estos pueden o no traer info sobre la revisión, según si verRevision==1
   //tambien hay pruebas. pueden traer o no calificaion
   //puede que haya más de una prueba (tal vez? el codigo no es muy claro) 
+
+  /* {
+    "numActa": "1524852",
+    "codAsignatura": "502257",
+    "anyo": "20230",
+    "descAnyo": "2023/24",
+    "descPlan": "Máster Universitario en Comunicación Social",
+    "descCiclo": "Indiferente",
+    "descCurso": "Indiferente",
+    "descAsignatura": "Los medios locales y la entrevista. Análisis de modelos",
+    "descConvocatoria": "Enero",
+    "valorCalificacion": "7.00",
+    "descCalificacion": "Notable",
+    "esDefinitiva": "0",
+    "verRevision": "1",
+    "fIniRevision": "07/02/2024",
+    "fFinRevision": "13/02/2024",
+    "fedatarios": "CAMACHO MARKINA, IDOIA, SANTOS DIEZ, MARIA TERESA",
+    "horario": "09:00-10:00 ",
+    "lugarRevision": "Enviar por favor email (mariateresa.santos@ehu.eus) para concretar hora. Gracias",
+    "hayPruebas": "0",
+    "numPrueba": "",
+    "fPrueba": "",
+    "valorCalifPrueba": "",
+    "descCalifPrueba": "",
+    "verRevisionPrueba": "",
+    "fIniRevisionPru": "",
+    "fFinRevisionPru": "",
+    "fedatarioPru": "",
+    "horarioPru": "",
+    "lugarRevisionPru": ""
+  } */
+
+  Future<List<NotaProvisional>> getNotasProvisionales() async{
+    List<dynamic> json = await GaurClient().getNotasProvisionales();
+    return json.map((e) => NotaProvisional.fromJson(e)).toList();
+  }
 }
