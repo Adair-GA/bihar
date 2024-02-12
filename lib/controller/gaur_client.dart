@@ -10,8 +10,8 @@ class TokenExpiredException implements Exception{
 
 
 class GaurClient{
-  // static const String _url = "https://aa4ee609-656b-4a43-bb77-cd47683986d8.mock.pstmn.io/gaurMovilRS/rest";
-  static const String _url = "https://gestion-servicios.ehu.es/gaurMovilRS/rest";
+  static const String _url = "https://aa4ee609-656b-4a43-bb77-cd47683986d8.mock.pstmn.io/gaurMovilRS/rest";
+  // static const String _url = "https://gestion-servicios.ehu.es/gaurMovilRS/rest";
   final Client _client = SentryHttpClient();
   String? _authToken;
 
