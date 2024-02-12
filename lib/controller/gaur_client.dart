@@ -109,6 +109,22 @@ class GaurClient{
     return (jsonDecode(response.body));
   }
 
+  Future<dynamic> getNotasProvisionales() async {
+    String numExp = ProfileController().expedienteActivo!.numExpediente;
+    String url = "$_url/notas/getNotasProvisionales";
+    Response response = await post(
+      Uri.parse(url),
+      headers: {
+        "auth-token": _authToken!
+      },
+      body: {
+        "_numExp": numExp,
+        "_idp": LoginData.ldap!,
+        "_codPlan": ProfileController().expedienteActivo!.codplan
+    });
+    return (jsonDecode(response.body));
+  }
+
   void logout(){
     _authToken = null;
     LoginData.logout();
