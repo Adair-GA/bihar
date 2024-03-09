@@ -1,5 +1,6 @@
 class NotaProvisional{
   double?    nota;
+  String? descCalificacion;
   String? descPlan;
   String? descCiclo;
   String? descCurso;
@@ -16,7 +17,8 @@ class NotaProvisional{
 
   factory NotaProvisional.fromJson(dynamic json){
     return NotaProvisional(
-      double.tryParse(json["valorCalificacion"]),
+      double.tryParse(
+      json["valorCalificacion"]),
       json["descPlan"],
       json["descCiclo"],
       json["descCurso"],
@@ -43,4 +45,11 @@ class NotaProvisional{
     this.horarioRevision,
     this.lugarRevision,
   );
+
+  String getNota(){
+    if(nota == null){
+      return descCalificacion ?? "Sin calificar";
+    }
+    return nota.toString();
+  }
 }

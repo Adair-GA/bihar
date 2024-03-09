@@ -8,7 +8,8 @@ class NotasController{
 
   //Si el tipo de enseñanza es 5 o 6, mostrar descPlan en vez de descAsignatura
   //La calificacion puede traer solo descCalificacion sin valorCalificacion
-  //if (tipoEnse == "1" || tipoEnse == "2" || tipoEnse == "4"), mostrar item.descCiclo, item.descCurso, item.descConvocatoria, nota, definitiva
+  //if (tipoEnse == "1" || tipoEnse == "2" || tipoEnse == "4"), mostrar item.descCiclo, 
+  //item.descCurso, item.descConvocatoria, nota, definitiva
   //if (tipoEnse == "12") lo mismo pero sin descCiclo
   //si es 5 o 6 mostrar solo calificacion y si es definitiva
   //si no, item.descConvocatoria, nota y definitiva
@@ -22,8 +23,8 @@ class NotasController{
     "anyo": "20230",
     "descAnyo": "2023/24",
     "descPlan": "Máster Universitario en Comunicación Social",
-    "descCiclo": "Indiferente",
-    "descCurso": "Indiferente",
+    "descCiclo": "ciclo",
+    "descCurso": "curso",
     "descAsignatura": "Los medios locales y la entrevista. Análisis de modelos",
     "descConvocatoria": "Enero",
     "valorCalificacion": "7.00",
