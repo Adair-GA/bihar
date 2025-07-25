@@ -1,5 +1,6 @@
 import 'package:bihar/controller/gaur_client.dart';
 import 'package:bihar/model/dia.dart';
+import 'package:bihar/model/exceptions/day_not_in_range_exception.dart';
 import 'package:flutter/material.dart';
 
 class TimetableController {
@@ -20,7 +21,7 @@ class TimetableController {
   Future<Dia> getDay(DateTime day) async{
     _available ??= await getAvailable();
     if (day.isAfter(_available!.end) || day.isBefore(_available!.start)) {
-      throw Exception("La fecha $day no está disponible");
+      throw DayNotInRangeException(firstAvailableDay: _available!.start);
     }
     final dia = await GaurClient().getHorario(day);
     return Dia.fromJson(dia);

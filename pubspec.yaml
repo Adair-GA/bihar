@@ -73,7 +73,6 @@ flutter:
   uses-material-design: true
   assets:
     - assets/img/day_off.png
-    - assets/img/no_marks.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

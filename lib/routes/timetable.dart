@@ -24,6 +24,9 @@ class _TimeTableState extends State<TimeTable> {
     TimetableController().getAvailable().then((value) => 
       setState(() {
         available = value;
+        if(selectedDate.isBefore(available!.start)){
+          selectedDate = available!.start;
+        }
       })
     );
   }
