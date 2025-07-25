@@ -1,4 +1,5 @@
-import 'package:bihar/controller/gaur_controller.dart';
+import 'package:bihar/controller/login_data.dart';
+import 'package:bihar/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
 
 
@@ -56,9 +57,9 @@ class _LoginState extends State<Login> {
                   if (int.tryParse(value) == null) {
                     return 'El LDAP solo son números';
                   }
-                  if (value.length != 7) {
-                    return 'El LDAP tiene que tener 7 dígitos';
-                  }
+                  // if (value.length != 7) {
+                  //   return 'El LDAP tiene que tener 7 dígitos';
+                  // }
                   return null;
                 },
                 onSaved: (newValue) => _ldap = newValue,
@@ -99,20 +100,20 @@ class _LoginState extends State<Login> {
             return;
           }
           _loginformKey.currentState!.save();
-          switch (await GaurController().login(_ldap!, _password!)) {
-            case GaurLoginResponse.ok:
+          LoginData.setCredentials(_ldap!, _password!);
+          switch (await ProfileController().login()) {
+            case LoginResponse.ok:
               Navigator.of(context).pushReplacementNamed('/home');
               break;
-            case GaurLoginResponse.connectionError:
+            case LoginResponse.connectionError:
               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Error de conexión', style: TextStyle(color: Colors.white)), backgroundColor: Colors.red));
               break;
-            case GaurLoginResponse.userNotFound:
-            case GaurLoginResponse.wrongPassword:
+            case LoginResponse.invalidCredentials:
               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Credenciales incorrectas', style: TextStyle(color: Colors.white)), backgroundColor: Colors.red));
               break;
             default:
               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Error desconocido', style: TextStyle(color: Colors.white)), backgroundColor: Colors.red));
-        }
+          }
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),

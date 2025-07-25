@@ -1,11 +1,11 @@
-import 'package:bihar/controller/gaur_controller.dart';
+import 'package:bihar/controller/profile_controller.dart';
 import 'package:bihar/routes/home.dart';
 import 'package:bihar/routes/timetable.dart';
 import 'package:flutter/material.dart';
 
 
 class HomePage extends StatefulWidget {
-  HomePage({super.key});
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -56,18 +56,18 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> logout(BuildContext context) async {
-    GaurController().logout();
+    ProfileController().logout();
     Navigator.of(context).pushReplacementNamed('/login');
   }
 
   Widget getBody(BuildContext context){
     switch(index){
       case 0:
-        return Home();
+        return const Home();
       case 1:
-        return TimeTable();
+        return const TimeTable();
       default:
-        return Home();
+        return const Home();
     }
   }
 }

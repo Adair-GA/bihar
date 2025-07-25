@@ -1,16 +1,31 @@
-import 'package:bihar/controller/gaur_controller.dart';
+import 'package:bihar/controller/login_data.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:bihar/login.dart';
 import 'package:bihar/homepage.dart';
 import 'package:bihar/splashpage.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   initializeDateFormatting();
-  await GaurController().init();
-  runApp(const MyApp());
+  Intl.defaultLocale = 'es_ES';
+  await LoginData.init();
+  if (kReleaseMode){
+    SentryFlutter.init(
+      (options) => options
+        ..dsn='https://f0e2a7201752411c8bc97ecfa4cfa34c@biharlogs.duckdns.org/1' // if hard coding GlitchTip DSN
+        ..tracesSampleRate=0.01  // Performance trace 1% of events
+        ..enableAutoSessionTracking=false,
+      appRunner: () => runApp(MyApp())
+    );
+  }else{
+    runApp(MyApp());
+  }
 }
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -19,12 +34,21 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       locale: const Locale('es', 'ES'),
+      supportedLocales: {
+        const Locale('es', 'ES'),
+        const Locale("eu", "ES")
+      },
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
       theme: ThemeData(),
       darkTheme: ThemeData.dark(),
-      home: SplashPage(),
+      home: const SplashPage(),
       routes: <String, WidgetBuilder>{
-        "/splash":(context) => SplashPage(),
-        '/home': (context) => HomePage(),
+        "/splash":(context) => const SplashPage(),
+        '/home': (context) => const HomePage(),
         '/login': (context) => const Login(),
       }
     );

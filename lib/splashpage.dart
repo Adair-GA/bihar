@@ -1,20 +1,20 @@
-import 'package:bihar/controller/gaur_controller.dart';
+import 'package:bihar/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
 
 class SplashPage extends StatefulWidget {
-  SplashPage({Key? key}) : super(key: key);
+  const SplashPage({Key? key}) : super(key: key);
 
   @override
-  _SplashPageState createState() => _SplashPageState();
+  State<SplashPage> createState() => _SplashPageState();
 }
 
 class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
-    GaurController().login(null, null).then((value) => 
+    ProfileController().login().then((value) => 
     {
-      if (value == GaurLoginResponse.ok) {
+      if (value == LoginResponse.ok) {
         Navigator.of(context).pushReplacementNamed('/home')
       } else {
         Navigator.of(context).pushReplacementNamed('/login')

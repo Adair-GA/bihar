@@ -13,8 +13,8 @@ class Clase{
     String fecha = json['fecha'];
     String intervalo = json['intervalo'];
 
-    String horaC = fecha + ", " + intervalo.split("-")[0].trim();
-    String horaF = fecha + ", " + intervalo.split("-")[1].trim();
+    String horaC = "$fecha, ${intervalo.split("-")[0].trim()}";
+    String horaF = "$fecha, ${intervalo.split("-")[1].trim()}";
     DateFormat format = DateFormat("d 'de' MMMM 'de' y, HH:mm", 'es_ES');
 
     return Clase(
