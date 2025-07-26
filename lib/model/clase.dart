@@ -8,6 +8,8 @@ class Clase{
   String profesor;
   String tipo;
   String grupo;
+  String grupoCorto;
+  String edificio;
   
   factory Clase.fromJson(Map<String, dynamic> json) {
     String fecha = json['fecha'];
@@ -24,16 +26,18 @@ class Clase{
       aula: json['aula'],
       profesor: json['profesores'],
       tipo: json['descTipoGrupo'],
-      grupo: json['numTipoGrupo'],
+      grupo: json['grupo'],
+      grupoCorto: json['numTipoGrupo'],
+      edificio: json['edificio'],
     );
   }
 
-  Clase({required this.horaComienzo, required this.horaFin, required this.nombreAsignatura, required this.aula, required this.profesor, required this.tipo, required this.grupo});
+  Clase({required this.horaComienzo, required this.horaFin, required this.nombreAsignatura, required this.aula, required this.profesor, required this.tipo, required this.grupo, required this.edificio, required this.grupoCorto});
 
   String getDesc(){
-    if (grupo == "0"){
+    if (grupoCorto == "0"){
       return tipo;
     }
-    return "$tipo: G$grupo";
+    return "$tipo: G$grupoCorto";
   }
 }
