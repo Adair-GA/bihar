@@ -1,4 +1,4 @@
-package com.example.bihar
+package ga.adair.bihar
 
 import io.flutter.embedding.android.FlutterActivity
 
