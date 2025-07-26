@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:bihar/controller/login_data.dart';
@@ -95,7 +96,14 @@ class GaurClient {
     return (jsonDecode(response.body));
   }
 
+  void postLogout() {
+    String url = "$_url/login/logout";
+    unawaited(post(Uri.parse(url), headers: {"auth-token": _authToken!}));
+    return;
+  }
+
   void logout() {
+    postLogout();
     _authToken = null;
     LoginData.logout();
   }
