@@ -21,7 +21,7 @@ class _TimeTableState extends State<TimeTable> {
   @override
   void initState() {
     super.initState();
-    TimetableController().getAvailable().then((value) => 
+    TimetableController().getAvailable().then((value) =>
       setState(() {
         available = value;
         if(selectedDate.isBefore(available!.start)){
@@ -77,9 +77,9 @@ class _TimeTableState extends State<TimeTable> {
 
   String _getHora(DateTime time){
     DateFormat fm = DateFormat("kk:mm");
-    return fm.format(time); 
+    return fm.format(time);
   }
-  
+
   Widget _buildDatePicker() {
     return Row(
           children: [
@@ -151,59 +151,106 @@ class _TimeTableState extends State<TimeTable> {
     }
   }
 
-  //TODO: hacer esto con OpenContainer de animations
   Widget getItem(Clase clase){
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(colors: [Color.fromARGB(255, 48, 144, 168), Color.fromARGB(255, 172, 14, 245)])
-      ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Flexible(
-              flex: 3,
-              fit: FlexFit.tight,
-              child: Column(
-                children: [
-                  Text(_getHora(clase.horaComienzo)),
-                  const Text(" | "),
-                  Text(_getHora(clase.horaFin)),
-                ],
-              ),
-            ),
-            Flexible(
-              flex: 16,
-              fit: FlexFit.tight,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(clase.nombreAsignatura, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis,),
-                    Text(clase.getDesc(), style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w100),)
-                  ],
-                ),
-              ),
-            ),
-            Flexible(
-              flex: 4,
-              fit: FlexFit.tight,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(clase.aula),
-                  ],
-                ),
-              ),
-            )
-          ],
+    return InkWell(
+      child: Ink(
+        decoration: BoxDecoration(
+          color: Theme.of(context).brightness == Brightness.light ? Colors.blue[200] : const Color.fromARGB(255, 48, 144, 168)
         ),
-      );
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Flexible(
+                flex: 3,
+                fit: FlexFit.tight,
+                child: Column(
+                  children: [
+                    Text(_getHora(clase.horaComienzo)),
+                    clase.conflict ? const Text(" ⚠️ ") : const Text(" | "),
+                    Text(_getHora(clase.horaFin)),
+                  ],
+                ),
+              ),
+              Flexible(
+                flex: 16,
+                fit: FlexFit.tight,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(clase.nombreAsignatura, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis,),
+                      Text(clase.getDesc(), style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w100),)
+                    ],
+                  ),
+                ),
+              ),
+              Flexible(
+                flex: 4,
+                fit: FlexFit.tight,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(clase.aula),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      onTap: () {
+        showDialog(context: context, builder:
+          (BuildContext context) => AlertDialog(
+            title: FittedBox(fit: BoxFit.fitWidth,child: Text(clase.nombreAsignatura)),
+            content: Builder(
+              builder: (context) {
+                var width = MediaQuery.of(context).size.width;
+
+                return SizedBox(
+                  width: width + 100,
+                  child: Table(
+                   columnWidths: const {
+                     0: IntrinsicColumnWidth(),
+                     1: FixedColumnWidth(16),
+                     2: FlexColumnWidth()
+                   },
+                   border: const TableBorder(verticalInside: BorderSide(color: Color(0x000000FF), width: 3)),
+                   children: [
+                     TableRow(children: [
+                       const Text("Tipo"),
+                       const Text(" "),
+                       Text(clase.tipo, style: const TextStyle(height: 1.75),)
+                     ]),
+                     TableRow(children: [
+                       const Text("Grupo"),
+                       const Text(" "),
+                       Text(clase.grupo, style: const TextStyle(height: 1.75),)
+                     ]),
+                     TableRow(children: [
+                       const Text("Profesor"),
+                       const Text(" "),
+                       Text(clase.profesor, style: const TextStyle(height: 1.75))
+                     ]),
+                     TableRow(children: [
+                       const Text("Lugar"),
+                       const Text(" "),
+                       Text('${clase.edificio} - ${clase.aula}', style: const TextStyle(height: 1.75))
+                     ])
+                   ],
+                  ),
+                 );
+            },
+            ),
+          )
+        );
+      },
+    );
   }
-  
+
   Widget empty() {
     return Center(
       child: Column(
@@ -211,7 +258,7 @@ class _TimeTableState extends State<TimeTable> {
           Padding(
             padding: const EdgeInsets.all(20),
             child: Text("No tienes clase este dia!", style: TextStyle(
-              color: Theme.of(context).colorScheme.onBackground,
+              color: Theme.of(context).colorScheme.onSurface,
               fontSize: 20
             ),),
           ),
