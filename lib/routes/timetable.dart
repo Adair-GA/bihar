@@ -151,12 +151,11 @@ class _TimeTableState extends State<TimeTable> {
     }
   }
 
-  //TODO: hacer esto con OpenContainer de animations
   Widget getItem(Clase clase){
     return InkWell(
       child: Ink(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(colors: [Color.fromARGB(255, 48, 144, 168), Color.fromARGB(255, 172, 14, 245)])
+        decoration: BoxDecoration(
+          color: Theme.of(context).brightness == Brightness.light ? Colors.blue[200] : const Color.fromARGB(255, 48, 144, 168)
         ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
