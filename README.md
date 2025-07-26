@@ -1,18 +1,14 @@
-# bihar
+# B.I.H.A.R.
 
-A new Flutter project.
+B.I.H.A.R., o **Bastante Inteligentemente Hecha Aplicacion Renovada**, es un sustiuto para la aplicación móvil
+de G.A.U.R. de la UPV/EHU.
 
-## Getting Started
+El foco principal al hacerla era lograr una aplicación que cargue más rápido que la original,
+y que no requiera pulsar el botón de Login una vez las credenciales están almacenadas.
 
-This project is a starting point for a Flutter application.
+Es un proyecto hecho de manera completamente independiente, haciendo ingeniería inversa a la API de GAUR.
+No es una aplicación estable, puede dejar de funcionar en cualquier momento.
 
-A few resources to get you started if this is your first Flutter project:
+No tengo ninguna afiliación con la UPV/EHU más que estudiar alli.  
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-# Illustrations:
-<a href="https://iconscout.com/illustrations/guy" class="text-underline font-size-sm" target="_blank">guy walking with dog in the park</a> by <a href="https://iconscout.com/contributors/iconscout" class="text-underline font-size-sm">IconScout Store</a> on <a href="https://iconscout.com" class="text-underline font-size-sm">IconScout</a>
+Toda PR, petición, aviso o reporte de error será bienvenida.
