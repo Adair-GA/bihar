@@ -14,6 +14,8 @@ class _LoginState extends State<Login> {
   String? _ldap;
   String? _password;
 
+  bool _passwordVisible = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,49 +36,62 @@ class _LoginState extends State<Login> {
   }
 
   Widget _loginForm() {
-    return Form(
-        key: _loginformKey,
-        child: Column(children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: TextFormField(
-              decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'LDAP',
-                  hintText: 'Tu usuario LDAP de GAUR'),
-              validator: (String? value) {
-                if (value == null || value.isEmpty) {
-                  return 'El usuario no puede estar vacío';
-                }
-                if (int.tryParse(value) == null) {
-                  return 'El LDAP solo son números';
-                }
-                // if (value.length != 7) {
-                //   return 'El LDAP tiene que tener 7 dígitos';
-                // }
-                return null;
-              },
-              onSaved: (newValue) => _ldap = newValue,
+    return AutofillGroup(
+      child: Form(
+          key: _loginformKey,
+          child: Column(children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: TextFormField(
+                decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'LDAP',
+                    hintText: 'Tu usuario LDAP de GAUR'),
+                autofillHints: const [AutofillHints.username],
+                validator: (String? value) {
+                  if (value == null || value.isEmpty) {
+                    return 'El usuario no puede estar vacío';
+                  }
+                  if (int.tryParse(value) == null) {
+                    return 'El LDAP solo son números';
+                  }
+                  return null;
+                },
+                onSaved: (newValue) => _ldap = newValue,
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: TextFormField(
-              obscureText: true,
-              decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Contraseña',
-                  hintText: 'Tu contraseña de GAUR'),
-              validator: (String? value) {
-                if (value == null || value.isEmpty) {
-                  return 'La contraseña no puede estar vacía';
-                }
-                return null;
-              },
-              onSaved: (newValue) => _password = newValue,
-            ),
-          )
-        ]));
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: TextFormField(
+                obscureText: !_passwordVisible,
+                autofillHints: const [AutofillHints.password],
+                decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    labelText: 'Contraseña',
+                    suffixIcon: IconButton(
+                      icon: Icon(_passwordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off),
+                      onPressed: () {
+                        setState(
+                          () {
+                            _passwordVisible = !_passwordVisible;
+                          },
+                        );
+                      },
+                    ),
+                    hintText: 'Tu contraseña de GAUR'),
+                validator: (String? value) {
+                  if (value == null || value.isEmpty) {
+                    return 'La contraseña no puede estar vacía';
+                  }
+                  return null;
+                },
+                onSaved: (newValue) => _password = newValue,
+              ),
+            )
+          ])),
+    );
   }
 
   Widget _loginButton() {
