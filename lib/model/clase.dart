@@ -21,17 +21,16 @@ class Clase {
     DateFormat format = DateFormat("d 'de' MMMM 'de' y, HH:mm", 'es_ES');
 
     return Clase(
-      horaComienzo: format.parse(horaC),
-      horaFin: format.parse(horaF),
-      nombreAsignatura: json['descAsig'],
-      aula: json['aula'],
-      profesor: json['profesores'],
-      tipo: json['descTipoGrupo'],
-      grupo: json['grupo'],
-      grupoCorto: json['numTipoGrupo'],
-      edificio: json['edificio'],
-      conflict: json['numAsig'] != '1'
-    );
+        horaComienzo: format.parse(horaC),
+        horaFin: format.parse(horaF),
+        nombreAsignatura: json['descAsig'],
+        aula: json['aula'],
+        profesor: json['profesores'],
+        tipo: json['descTipoGrupo'],
+        grupo: json['grupo'],
+        grupoCorto: json['numTipoGrupo'],
+        edificio: json['edificio'],
+        conflict: json['numAsig'] != '1');
   }
 
   Clase(
@@ -44,8 +43,7 @@ class Clase {
       required this.grupo,
       required this.edificio,
       required this.grupoCorto,
-      required this.conflict
-      });
+      required this.conflict});
 
   String getDesc() {
     if (grupoCorto == "0") {

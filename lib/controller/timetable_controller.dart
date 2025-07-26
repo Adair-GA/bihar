@@ -5,8 +5,11 @@ import 'package:flutter/material.dart';
 
 class TimetableController {
   static final TimetableController _instance = TimetableController._internal();
+
   factory TimetableController() => _instance;
+
   TimetableController._internal();
+
   DateTimeRange? _available;
 
   Future<DateTimeRange> getAvailable() async {
@@ -18,7 +21,7 @@ class TimetableController {
     return dateTimeRange;
   }
 
-  Future<Dia> getDay(DateTime day) async{
+  Future<Dia> getDay(DateTime day) async {
     _available ??= await getAvailable();
     if (day.isAfter(_available!.end) || day.isBefore(_available!.start)) {
       throw DayNotInRangeException(firstAvailableDay: _available!.start);

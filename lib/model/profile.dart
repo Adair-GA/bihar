@@ -1,6 +1,6 @@
 import 'package:bihar/model/expediente.dart';
 
-class UserProfile{
+class UserProfile {
   String nombre;
   String dni;
   String? foto;

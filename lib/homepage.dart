@@ -3,7 +3,6 @@ import 'package:bihar/routes/home.dart';
 import 'package:bihar/routes/timetable.dart';
 import 'package:flutter/material.dart';
 
-
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -17,13 +16,13 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: const Text("BIHAR"),
         actions: [
           IconButton(
-            onPressed: () async{
+            onPressed: () async {
               await logout(context);
             },
             icon: const Icon(Icons.logout),
@@ -31,16 +30,15 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       body: getBody(context),
-    bottomNavigationBar: NavigationBar(
-      onDestinationSelected: (int index) {
-        setState(() {
-          this.index = index;
-        });
-      },
-      selectedIndex: index,
-
-      destinations: const [
-            NavigationDestination(
+      bottomNavigationBar: NavigationBar(
+        onDestinationSelected: (int index) {
+          setState(() {
+            this.index = index;
+          });
+        },
+        selectedIndex: index,
+        destinations: const [
+          NavigationDestination(
             selectedIcon: Icon(Icons.home),
             icon: Icon(Icons.home_outlined),
             label: 'Home',
@@ -50,8 +48,8 @@ class _HomePageState extends State<HomePage> {
             icon: Icon(Icons.table_rows_outlined),
             label: 'Horario',
           )
-      ],
-    ),
+        ],
+      ),
     );
   }
 
@@ -60,8 +58,8 @@ class _HomePageState extends State<HomePage> {
     Navigator.of(context).pushReplacementNamed('/login');
   }
 
-  Widget getBody(BuildContext context){
-    switch(index){
+  Widget getBody(BuildContext context) {
+    switch (index) {
       case 0:
         return const Home();
       case 1:
@@ -71,4 +69,3 @@ class _HomePageState extends State<HomePage> {
     }
   }
 }
-

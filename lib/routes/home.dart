@@ -18,7 +18,7 @@ class _HomeState extends State<Home> {
   int cantExpedientes = 0;
 
   @override
-  void initState(){
+  void initState() {
     expediente = 1 + ProfileController().indexExpedienteActivo;
     super.initState();
   }
@@ -33,33 +33,46 @@ class _HomeState extends State<Home> {
             if (cantExpedientes > 1)
               IconButton(
                 icon: const Icon(Icons.arrow_back_ios),
-                onPressed: expediente > 1 ? () => setState(() {expediente--; ProfileController().setExpediente(expediente - 1);} ) : null,
+                onPressed: expediente > 1
+                    ? () => setState(() {
+                          expediente--;
+                          ProfileController().setExpediente(expediente - 1);
+                        })
+                    : null,
               ),
-            Expanded(child: Center(child: Padding(
+            Expanded(
+                child: Center(
+                    child: Padding(
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
               child: TextScroll(
-                "${ProfileController().profile!.expedientes[expediente-1].grado}.",
-                intervalSpaces: 20,
-                style: const TextStyle(fontSize: 15),
-                velocity: const Velocity(pixelsPerSecond: Offset(50, 0),
-              )),
+                  "${ProfileController().profile!.expedientes[expediente - 1].grado}.",
+                  intervalSpaces: 20,
+                  style: const TextStyle(fontSize: 15),
+                  velocity: const Velocity(
+                    pixelsPerSecond: Offset(50, 0),
+                  )),
             ))),
             if (cantExpedientes > 1)
               IconButton(
                 icon: const Icon(Icons.arrow_forward_ios),
-                onPressed: expediente < cantExpedientes ? () => setState(() {expediente++; ProfileController().setExpediente(expediente - 1);})  : null,
+                onPressed: expediente < cantExpedientes
+                    ? () => setState(() {
+                          expediente++;
+                          ProfileController().setExpediente(expediente - 1);
+                        })
+                    : null,
               ),
           ],
-          ),
+        ),
         const Divider(),
       ],
     );
   }
 
-  Widget _profile(BuildContext context){
+  Widget _profile(BuildContext context) {
     UserProfile profile = ProfileController().profile!;
     cantExpedientes = profile.expedientes.length;
-    return  Padding(
+    return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
@@ -80,9 +93,13 @@ class _HomeState extends State<Home> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(StringUtils.capitalize(profile.nombre, allWords: true), style: const TextStyle(fontSize: 20)),
+                      Text(
+                          StringUtils.capitalize(profile.nombre,
+                              allWords: true),
+                          style: const TextStyle(fontSize: 20)),
                       Text(profile.dni, style: const TextStyle(fontSize: 15)),
-                      Text(profile.expedientes[expediente-1].facultad, style: const TextStyle(fontSize: 15))
+                      Text(profile.expedientes[expediente - 1].facultad,
+                          style: const TextStyle(fontSize: 15))
                     ],
                   ),
                 ),

@@ -1,13 +1,14 @@
 import 'package:bihar/model/clase.dart';
 
-class Dia{
+class Dia {
   List<Clase> clases;
 
   factory Dia.fromJson(List<dynamic> json) {
     List<Clase> cls = [];
-    if(json.isNotEmpty){
-      for(var clase in json){
-        if (clase['numAsig'] == "0" || clase['numAsig'] == "") continue; // No hay clase
+    if (json.isNotEmpty) {
+      for (var clase in json) {
+        if (clase['numAsig'] == "0" || clase['numAsig'] == "")
+          continue; // No hay clase
         cls.add(Clase.fromJson(clase));
       }
     }
@@ -16,9 +17,7 @@ class Dia{
 
   Dia(this.clases);
 
-  bool empty(){
+  bool empty() {
     return clases.isEmpty;
   }
-
-
 }
