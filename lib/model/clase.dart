@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart';
 
-class Clase{
+class Clase {
   DateTime horaComienzo;
   DateTime horaFin;
   String nombreAsignatura;
@@ -10,7 +10,8 @@ class Clase{
   String grupo;
   String grupoCorto;
   String edificio;
-  
+  bool conflict;
+
   factory Clase.fromJson(Map<String, dynamic> json) {
     String fecha = json['fecha'];
     String intervalo = json['intervalo'];
@@ -29,13 +30,25 @@ class Clase{
       grupo: json['grupo'],
       grupoCorto: json['numTipoGrupo'],
       edificio: json['edificio'],
+      conflict: json['numAsig'] != '1'
     );
   }
 
-  Clase({required this.horaComienzo, required this.horaFin, required this.nombreAsignatura, required this.aula, required this.profesor, required this.tipo, required this.grupo, required this.edificio, required this.grupoCorto});
+  Clase(
+      {required this.horaComienzo,
+      required this.horaFin,
+      required this.nombreAsignatura,
+      required this.aula,
+      required this.profesor,
+      required this.tipo,
+      required this.grupo,
+      required this.edificio,
+      required this.grupoCorto,
+      required this.conflict
+      });
 
-  String getDesc(){
-    if (grupoCorto == "0"){
+  String getDesc() {
+    if (grupoCorto == "0") {
       return tipo;
     }
     return "$tipo: G$grupoCorto";

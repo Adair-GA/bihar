@@ -166,7 +166,7 @@ class _TimeTableState extends State<TimeTable> {
                 child: Column(
                   children: [
                     Text(_getHora(clase.horaComienzo)),
-                    const Text(" | "),
+                    clase.conflict ? const Text(" ⚠️ ") : const Text(" | "),
                     Text(_getHora(clase.horaFin)),
                   ],
                 ),
