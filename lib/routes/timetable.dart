@@ -1,6 +1,7 @@
 import 'package:bihar/controller/timetable_controller.dart';
 import 'package:bihar/model/clase.dart';
 import 'package:bihar/model/dia.dart';
+import 'package:bihar/model/exceptions/day_not_in_range_exception.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -50,6 +51,9 @@ class _TimeTableState extends State<TimeTable> {
           return const CircularProgressIndicator();
         }
         if (snapshot.hasError) {
+          if (snapshot.error is DayNotInRangeException) {
+            return const CircularProgressIndicator();
+          }
           return Text("Error: ${snapshot.error}");
         }
         if (snapshot.hasData) {
