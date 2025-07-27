@@ -11,6 +11,7 @@ class TimetableController {
   TimetableController._internal();
 
   DateTimeRange? _available;
+  final Map<DateTime, Dia> _cache = {};
 
   Future<DateTimeRange> getAvailable() async {
     Map<String, dynamic> body = await GaurClient().getFechasConsulta();
@@ -21,12 +22,19 @@ class TimetableController {
     return dateTimeRange;
   }
 
-  Future<Dia> getDay(DateTime day) async {
+  Future<Dia> getDay(DateTime date) async {
+    var cachedDay = _cache[date];
+    if (cachedDay != null) {
+      return cachedDay;
+    }
     _available ??= await getAvailable();
-    if (day.isAfter(_available!.end) || day.isBefore(_available!.start)) {
+    if (date.isAfter(_available!.end) || date.isBefore(_available!.start)) {
       throw DayNotInRangeException(firstAvailableDay: _available!.start);
     }
-    final dia = await GaurClient().getHorario(day);
-    return Dia.fromJson(dia);
+    final diaJSON = await GaurClient().getHorario(date);
+
+    var dia = Dia.fromJson(diaJSON);
+    _cache[date] = dia;
+    return dia;
   }
 }
