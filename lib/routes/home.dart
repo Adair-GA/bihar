@@ -98,7 +98,7 @@ class _HomeState extends State<Home> {
                               allWords: true),
                           style: const TextStyle(fontSize: 20)),
                       Text(profile.dni, style: const TextStyle(fontSize: 15)),
-                      Text(profile.expedientes[expediente - 1].facultad,
+                      Text(ProfileController().expedienteActivo!.facultad,
                           style: const TextStyle(fontSize: 15))
                     ],
                   ),

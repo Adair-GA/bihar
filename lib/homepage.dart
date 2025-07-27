@@ -1,6 +1,7 @@
 import 'package:bihar/controller/profile_controller.dart';
 import 'package:bihar/routes/home.dart';
 import 'package:bihar/routes/timetable.dart';
+import 'package:bihar/routes/tutorials.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -47,7 +48,12 @@ class _HomePageState extends State<HomePage> {
             selectedIcon: Icon(Icons.table_rows),
             icon: Icon(Icons.table_rows_outlined),
             label: 'Horario',
-          )
+          ),
+          NavigationDestination(
+            selectedIcon: Icon(Icons.co_present),
+            icon: Icon(Icons.co_present_outlined),
+            label: 'Tutorías',
+          ),
         ],
       ),
     );
@@ -64,6 +70,8 @@ class _HomePageState extends State<HomePage> {
         return const Home();
       case 1:
         return const TimeTable();
+      case 2:
+        return const Tutorials();
       default:
         return const Home();
     }

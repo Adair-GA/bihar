@@ -107,4 +107,16 @@ class GaurClient {
     _authToken = null;
     LoginData.logout();
   }
+
+  Future<dynamic> getSubjectsTutorial() async {
+    String numExp = ProfileController().expedienteActivo!.numExpediente;
+    String url = "$_url/tutorias/getAsignaturasTutorias";
+    Response response = await post(Uri.parse(url), headers: {
+      "auth-token": _authToken!
+    }, body: {
+      "_numExpediente": numExp,
+    });
+
+    return jsonDecode(response.body);
+  }
 }
