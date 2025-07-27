@@ -1,5 +1,6 @@
 import 'package:bihar/controller/tutorials_controller.dart';
 import 'package:bihar/model/tutorials/subject.dart';
+import 'package:bihar/routes/tutorials/teacher_view.dart';
 import 'package:flutter/material.dart';
 
 class Tutorials extends StatefulWidget {
@@ -77,6 +78,13 @@ class _TutorialsState extends State<Tutorials> {
                 ListTile(
                   title: Text(teacher.name),
                   trailing: const Icon(Icons.arrow_circle_right_outlined),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => TeacherView(
+                                year: subject.year, teacher: teacher)));
+                  },
                 )
             ],
           ),
