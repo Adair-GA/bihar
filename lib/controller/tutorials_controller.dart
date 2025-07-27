@@ -11,10 +11,10 @@ class TutorialsController {
   TutorialsController._internal();
 
   Future<List<Subject>> getSubjectList() async {
-    _subjectList =
-        SubjectList.fromJson(await GaurClient().getSubjectsTutorial());
-    // if (_subjectList == null || _subjectList!.subjectList.isEmpty){
-    // }
+    if (_subjectList == null || _subjectList!.subjectList.isEmpty) {
+      _subjectList =
+          SubjectList.fromJson(await GaurClient().getSubjectsTutorial());
+    }
     return _subjectList!.subjectList;
   }
 }
