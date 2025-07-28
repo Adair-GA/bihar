@@ -3,6 +3,7 @@ import 'package:bihar/model/tutorials/month.dart';
 import 'package:bihar/model/tutorials/subject.dart';
 import 'package:bihar/model/tutorials/subject_list.dart';
 import 'package:bihar/model/tutorials/tutorial.dart';
+import 'package:flutter/foundation.dart';
 
 class TutorialsController {
   static final TutorialsController _instance = TutorialsController._internal();
@@ -27,7 +28,7 @@ class TutorialsController {
     String cacheKey = year + dptID + teacherID;
     var cachedMonthList = _months[cacheKey];
 
-    if (cachedMonthList != null) {
+    if (cachedMonthList != null && !kDebugMode) {
       return cachedMonthList;
     }
 
@@ -43,7 +44,7 @@ class TutorialsController {
 
     var cachedTutorials = _tutorials[cacheKey];
 
-    if (cachedTutorials != null) {
+    if (cachedTutorials != null && !kDebugMode) {
       return cachedTutorials;
     }
 

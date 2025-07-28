@@ -20,8 +20,9 @@ class TeacherView extends StatefulWidget {
 class _TeacherViewState extends State<TeacherView> {
   Future<List<Month>>? _monthListFuture;
 
-  // Future<List<Tutorial>>? _tutorials;
+  Future<List<Tutorial>>? _tutorials;
   Month? _selectedMonth;
+  List<bool> _isExpanded = [];
 
   @override
   void initState() {
@@ -74,12 +75,14 @@ class _TeacherViewState extends State<TeacherView> {
     }
     _selectedMonth ??= monthList.first;
 
+    _tutorials ??= GaurClient().getTutorials(
+        widget.year,
+        widget.teacher.idpProfesor,
+        widget.teacher.codDpto,
+        _selectedMonth!.code);
+
     var tutorialBuilder = FutureBuilder(
-        future: GaurClient().getTutorials(
-            widget.year,
-            widget.teacher.idpProfesor,
-            widget.teacher.codDpto,
-            _selectedMonth!.code),
+        future: _tutorials,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -93,30 +96,66 @@ class _TeacherViewState extends State<TeacherView> {
           return const Text("Error desconocido");
         });
 
-    return Column(
-      children: [
-        Center(
-          child: DropdownButton(
-            value: _selectedMonth,
-            items: monthList.map<DropdownMenuItem<Month>>((month) {
-              return DropdownMenuItem<Month>(
-                  value: month, child: Text(month.name));
-            }).toList(),
-            onChanged: (Month? value) {
-              setState(() {
-                _selectedMonth = value!;
-              });
-            },
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Center(
+            child: DropdownButton(
+              value: _selectedMonth,
+              items: monthList.map<DropdownMenuItem<Month>>((month) {
+                return DropdownMenuItem<Month>(
+                    value: month, child: Text(month.name));
+              }).toList(),
+              onChanged: (Month? value) {
+                setState(() {
+                  _selectedMonth = value!;
+                });
+              },
+            ),
           ),
-        ),
-        const Divider(),
-        tutorialBuilder
-      ],
+          const Divider(),
+          tutorialBuilder
+        ],
+      ),
     );
   }
 
   Widget _buildTutorialList(List<Tutorial> tutorials) {
-    //Implement
-    return Text("TODO");
+    Map<String, List<Tutorial>> tutorialDays = {};
+    for (var tutorial in tutorials) {
+      tutorialDays[tutorial.dateName] ??= [];
+      tutorialDays[tutorial.dateName]!.add(tutorial);
+    }
+
+    if (_isExpanded.isEmpty || _isExpanded.length != tutorialDays.length) {
+      _isExpanded = List.filled(tutorialDays.length, false);
+    }
+
+    return ExpansionPanelList(
+        expansionCallback: (int index, bool isExpanded) {
+          setState(() {
+            _isExpanded[index] = isExpanded;
+          });
+        },
+        materialGapSize: 8,
+        children: [
+          for (var (i, day) in tutorialDays.values.indexed)
+            ExpansionPanel(
+                headerBuilder: (BuildContext context, bool isExpanded) {
+                  return ListTile(title: Text(day[0].dateName));
+                },
+                isExpanded: _isExpanded[i],
+                canTapOnHeader: true,
+                body: Column(
+                  children: [
+                    for (var time in day)
+                      ListTile(
+                        title: Text("${time.startDate} - ${time.endDate}"),
+                        subtitle: Text("${time.place}\n${time.building}"),
+                        isThreeLine: true,
+                      )
+                  ],
+                ))
+        ]);
   }
 }
