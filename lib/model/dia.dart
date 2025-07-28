@@ -7,8 +7,9 @@ class Dia {
     List<Clase> cls = [];
     if (json.isNotEmpty) {
       for (var clase in json) {
-        if (clase['numAsig'] == "0" || clase['numAsig'] == "")
+        if (clase['numAsig'] == "0" || clase['numAsig'] == "") {
           continue; // No hay clase
+        }
         cls.add(Clase.fromJson(clase));
       }
     }

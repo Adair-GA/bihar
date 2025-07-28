@@ -1,7 +1,10 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:bihar/controller/login_data.dart';
 import 'package:bihar/controller/profile_controller.dart';
+import 'package:bihar/model/tutorials/month.dart';
+import 'package:bihar/model/tutorials/tutorial.dart';
 import 'package:http/http.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
@@ -95,8 +98,78 @@ class GaurClient {
     return (jsonDecode(response.body));
   }
 
+  void postLogout() {
+    String url = "$_url/login/logout";
+    unawaited(post(Uri.parse(url), headers: {"auth-token": _authToken!}));
+    return;
+  }
+
   void logout() {
+    postLogout();
     _authToken = null;
     LoginData.logout();
+  }
+
+  Future<dynamic> getSubjectsTutorial() async {
+    String numExp = ProfileController().expedienteActivo!.numExpediente;
+    String url = "$_url/tutorias/getAsignaturasTutorias";
+    Response response = await post(Uri.parse(url), headers: {
+      "auth-token": _authToken!
+    }, body: {
+      "_numExpediente": numExp,
+    });
+
+    return jsonDecode(response.body);
+  }
+
+  Future<List<Month>> getMonthsTutorials(
+      String anyoAcademico, String idpProfesor, String codDpto) async {
+    String url = "$_url/tutorias/getMesesTutorias";
+    Response response = await post(Uri.parse(url), headers: {
+      "auth-token": _authToken!
+    }, body: {
+      "_anyoAcademico": anyoAcademico,
+      "_idpProfesor": idpProfesor,
+      "_codDpto": codDpto,
+    });
+
+    dynamic decoded = jsonDecode(response.body);
+
+    List<Month> result = [];
+    for (var mes in decoded) {
+      result.add(Month(mes["mes"], mes["codMes"]));
+    }
+
+    return result;
+  }
+
+  Future<List<Tutorial>> getTutorials(String anyoAcademico, String idpProfesor,
+      String codDpto, String codMes) async {
+    String url = "$_url/tutorias/getTutorias";
+    Response response = await post(Uri.parse(url), headers: {
+      "auth-token": _authToken!
+    }, body: {
+      "_anyoAcademico": anyoAcademico,
+      "_idpProfesor": idpProfesor,
+      "_codDpto": codDpto,
+      "_codMes": codMes,
+    });
+
+    dynamic decoded = jsonDecode(response.body);
+
+    List<Tutorial> result = [];
+    for (var tutorial in decoded) {
+      DateTime? date;
+      try {
+        date = DateTime.parse(tutorial["fecTutoria"]);
+      } on Exception {
+        // It's not really required
+      }
+
+      result.add(Tutorial(tutorial["fecha"], tutorial["horaInicio"],
+          tutorial["horaFin"], tutorial["lugar"], tutorial["edificio"], date));
+    }
+
+    return result;
   }
 }

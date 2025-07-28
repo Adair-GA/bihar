@@ -1,9 +1,9 @@
 import 'package:bihar/controller/login_data.dart';
+import 'package:bihar/homepage.dart';
+import 'package:bihar/login.dart';
+import 'package:bihar/splashpage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:bihar/login.dart';
-import 'package:bihar/homepage.dart';
-import 'package:bihar/splashpage.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
@@ -21,9 +21,9 @@ void main() async {
               'https://f0e2a7201752411c8bc97ecfa4cfa34c@biharlogs.duckdns.org/1' // if hard coding GlitchTip DSN
           ..tracesSampleRate = 0.01 // Performance trace 1% of events
           ..enableAutoSessionTracking = false,
-        appRunner: () => runApp(MyApp()));
+        appRunner: () => runApp(const MyApp()));
   } else {
-    runApp(MyApp());
+    runApp(const MyApp());
   }
 }
 
