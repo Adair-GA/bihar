@@ -1,6 +1,7 @@
 import 'package:bihar/controller/gaur_client.dart';
 import 'package:bihar/model/dia.dart';
 import 'package:bihar/model/exceptions/day_not_in_range_exception.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class TimetableController {
@@ -24,7 +25,7 @@ class TimetableController {
 
   Future<Dia> getDay(DateTime date) async {
     var cachedDay = _cache[date];
-    if (cachedDay != null) {
+    if (cachedDay != null && !kDebugMode) {
       return cachedDay;
     }
     _available ??= await getAvailable();

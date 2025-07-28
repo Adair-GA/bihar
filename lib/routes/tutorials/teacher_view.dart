@@ -1,4 +1,3 @@
-import 'package:bihar/controller/gaur_client.dart';
 import 'package:bihar/controller/tutorials_controller.dart';
 import 'package:bihar/model/tutorials/teacher.dart';
 import 'package:flutter/material.dart';
@@ -75,10 +74,10 @@ class _TeacherViewState extends State<TeacherView> {
     }
     _selectedMonth ??= monthList.first;
 
-    _tutorials ??= GaurClient().getTutorials(
+    _tutorials ??= TutorialsController().getTutorials(
         widget.year,
-        widget.teacher.idpProfesor,
         widget.teacher.codDpto,
+        widget.teacher.idpProfesor,
         _selectedMonth!.code);
 
     var tutorialBuilder = FutureBuilder(
@@ -129,6 +128,24 @@ class _TeacherViewState extends State<TeacherView> {
 
     if (_isExpanded.isEmpty || _isExpanded.length != tutorialDays.length) {
       _isExpanded = List.filled(tutorialDays.length, false);
+    }
+
+    if (tutorials.isEmpty) {
+      return const Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Center(
+              child: Text(
+            "⚠️",
+            style: TextStyle(fontSize: 80),
+          )),
+          Text(
+            "No hay tutorías disponibles",
+            style: TextStyle(fontSize: 28),
+          ),
+        ],
+      );
     }
 
     return ExpansionPanelList(
