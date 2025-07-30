@@ -12,3 +12,15 @@ No es una aplicación estable, puede dejar de funcionar en cualquier momento.
 No tengo ninguna afiliación con la UPV/EHU más que estudiar alli.  
 
 Toda PR, petición, aviso o reporte de error será bienvenida.
+
+# Illustrations:
+
+<a href="https://iconscout.com/illustrations/guy" class="text-underline font-size-sm" target="_blank">
+guy walking with dog in the park</a>
+by <a href="https://iconscout.com/contributors/iconscout" class="text-underline font-size-sm">
+IconScout Store</a> on <a href="https://iconscout.com" class="text-underline font-size-sm">
+IconScout</a>
+
+Imagen
+de <a href="https://www.freepik.es/vector-gratis/persona-plana-meditando-pacificamente_13404871.htm#fromView=search&term=yoga&track=sph&regularType=vector&page=1&position=23&uuid=7a1f6b25-2ed1-45ca-ba40-0dd4a92cdaac">
+Freepik</a>
