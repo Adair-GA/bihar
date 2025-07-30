@@ -37,7 +37,9 @@ jobs:
           echo "keyAlias=${{ secrets.KEY_ALIAS }}" >> android/key.properties
           echo "storeFile=keystore.jks" >> android/key.properties
 
-      - run: flutter build apk --build-number ${{ github.run_number }}
+
+      - name: Build apks
+        run: flutter build apk --split-per-abi --build-number ${{ github.run_number }}
 
       - uses: actions/upload-artifact@v4
         with:
