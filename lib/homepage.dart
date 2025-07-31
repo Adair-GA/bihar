@@ -60,8 +60,8 @@ class _HomePageState extends State<HomePage> {
             icon: Icon(Icons.mail_outlined),
             label: 'Notas',
           ),
-      ],
-    ),
+        ],
+      ),
     );
   }
 
@@ -85,4 +85,3 @@ class _HomePageState extends State<HomePage> {
     }
   }
 }
-

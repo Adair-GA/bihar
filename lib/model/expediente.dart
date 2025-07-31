@@ -3,5 +3,6 @@ class Expediente {
   int tipoEnsenanza;
   bool activo;
 
-  Expediente(this.numExpediente,this.facultad, this.grado, this.codplan, this.tipoEnsenanza, this.activo);
+  Expediente(this.numExpediente, this.facultad, this.grado, this.codplan,
+      this.tipoEnsenanza, this.activo);
 }
