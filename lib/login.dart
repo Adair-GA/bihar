@@ -43,6 +43,9 @@ class _LoginState extends State<Login> {
             Padding(
               padding: const EdgeInsets.all(10),
               child: TextFormField(
+                onFieldSubmitted: (_) {
+                  loginButtonPressed();
+                },
                 decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'LDAP',
@@ -64,6 +67,9 @@ class _LoginState extends State<Login> {
               padding: const EdgeInsets.all(10),
               child: TextFormField(
                 obscureText: !_passwordVisible,
+                onFieldSubmitted: (_) {
+                  loginButtonPressed();
+                },
                 autofillHints: const [AutofillHints.password],
                 decoration: InputDecoration(
                     border: const OutlineInputBorder(),
@@ -101,35 +107,7 @@ class _LoginState extends State<Login> {
       decoration: BoxDecoration(
           color: Colors.blue, borderRadius: BorderRadius.circular(20)),
       child: ElevatedButton(
-        onPressed: () async {
-          if (!_loginformKey.currentState!.validate()) {
-            return;
-          }
-          _loginformKey.currentState!.save();
-          LoginData.setCredentials(_ldap!, _password!);
-          switch (await ProfileController().login()) {
-            case LoginResponse.ok:
-              Navigator.of(context).pushReplacementNamed('/home');
-              break;
-            case LoginResponse.connectionError:
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  content: Text('Error de conexión',
-                      style: TextStyle(color: Colors.white)),
-                  backgroundColor: Colors.red));
-              break;
-            case LoginResponse.invalidCredentials:
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  content: Text('Credenciales incorrectas',
-                      style: TextStyle(color: Colors.white)),
-                  backgroundColor: Colors.red));
-              break;
-            default:
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  content: Text('Error desconocido',
-                      style: TextStyle(color: Colors.white)),
-                  backgroundColor: Colors.red));
-          }
-        },
+        onPressed: loginButtonPressed,
         style: ButtonStyle(
           backgroundColor:
               WidgetStateProperty.all(Theme.of(context).colorScheme.primary),
@@ -146,5 +124,35 @@ class _LoginState extends State<Login> {
         ),
       ),
     );
+  }
+
+  void loginButtonPressed() async {
+    if (!_loginformKey.currentState!.validate()) {
+      return;
+    }
+    _loginformKey.currentState!.save();
+    LoginData.setCredentials(_ldap!, _password!);
+    switch (await ProfileController().login()) {
+      case LoginResponse.ok:
+        Navigator.of(context).pushReplacementNamed('/home');
+        break;
+      case LoginResponse.connectionError:
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('Error de conexión',
+                style: TextStyle(color: Colors.white)),
+            backgroundColor: Colors.red));
+        break;
+      case LoginResponse.invalidCredentials:
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('Credenciales incorrectas',
+                style: TextStyle(color: Colors.white)),
+            backgroundColor: Colors.red));
+        break;
+      default:
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('Error desconocido',
+                style: TextStyle(color: Colors.white)),
+            backgroundColor: Colors.red));
+    }
   }
 }
