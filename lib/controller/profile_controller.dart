@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:bihar/controller/gaur_client.dart';
 import 'package:bihar/controller/login_data.dart';
 import 'package:bihar/model/expediente.dart';
@@ -40,17 +41,7 @@ class ProfileController {
     String nombre = loginBody["compactado"];
     String? foto = loginBody["foto"];
 
-    final body = await GaurClient().getExpedientes();
-
-    int numExpedientes = body.length;
-    List<Expediente> expedientes = [];
-    for (int i = 0; i < numExpedientes; i++) {
-      expedientes.add(Expediente(
-          body[i]["numExpediente"],
-          body[i]["descCentro"],
-          body[i]["descPlan"],
-          body[i]["estadoExpediente"] == "Abierto"));
-    }
+    final expedientes = await GaurClient().getExpedientes();
     return UserProfile(nombre, dni, foto, expedientes);
   }
 

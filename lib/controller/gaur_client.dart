@@ -3,10 +3,15 @@ import 'dart:convert';
 
 import 'package:bihar/controller/login_data.dart';
 import 'package:bihar/controller/profile_controller.dart';
+import 'package:bihar/model/expediente.dart';
 import 'package:bihar/model/tutorials/month.dart';
 import 'package:bihar/model/tutorials/tutorial.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+
+import '../model/dia.dart';
+import '../model/tutorials/subject_list.dart';
 
 class TokenExpiredException implements Exception {}
 
@@ -68,24 +73,38 @@ class GaurClient {
     return body;
   }
 
-  Future<dynamic> getExpedientes() async {
+  Future<List<Expediente>> getExpedientes() async {
     Response response = await _client.post(
         Uri.parse('$_url/expedientes/getExpedientesByIdp'),
         headers: {'auth-token': _authToken!, 'Accept': '*/*'});
-    return jsonDecode(response.body);
+    var body = jsonDecode(response.body);
+
+    List<Expediente> expedientes = [];
+    for (int i = 0; i < body.length; i++) {
+      expedientes.add(Expediente(
+          body[i]["numExpediente"],
+          body[i]["descCentro"],
+          body[i]["descPlan"],
+          body[i]["estadoExpediente"] == "Abierto"));
+    }
+    return expedientes;
   }
 
-  Future<dynamic> getFechasConsulta() async {
+  Future<DateTimeRange> getFechasConsulta() async {
     Response response =
         await post(Uri.parse("$_url/horarios/getFechasConsulta"), headers: {
       "auth-token": _authToken!
     }, body: {
       "_numExpediente": ProfileController().expedienteActivo!.numExpediente
     });
-    return jsonDecode(response.body);
+    var json = jsonDecode(response.body);
+
+    return DateTimeRange(
+        start: DateTime.parse(json["minFec"]),
+        end: DateTime.parse(json["maxFec"]));
   }
 
-  Future<dynamic> getHorario(DateTime day) async {
+  Future<Dia> getHorario(DateTime day) async {
     String numExp = ProfileController().expedienteActivo!.numExpediente;
     String url = "$_url/horarios/getHorario";
     Response response = await post(Uri.parse(url), headers: {
@@ -95,7 +114,7 @@ class GaurClient {
       "_fecha": day.toIso8601String().substring(0, 10),
       "_enMediasHoras": "N"
     });
-    return (jsonDecode(response.body));
+    return Dia.fromJson(jsonDecode(response.body));
   }
 
   void postLogout() {
@@ -110,7 +129,7 @@ class GaurClient {
     LoginData.logout();
   }
 
-  Future<dynamic> getSubjectsTutorial() async {
+  Future<SubjectList> getSubjectsTutorial() async {
     String numExp = ProfileController().expedienteActivo!.numExpediente;
     String url = "$_url/tutorias/getAsignaturasTutorias";
     Response response = await post(Uri.parse(url), headers: {
@@ -119,7 +138,7 @@ class GaurClient {
       "_numExpediente": numExp,
     });
 
-    return jsonDecode(response.body);
+    return SubjectList.fromJson(jsonDecode(response.body));
   }
 
   Future<List<Month>> getMonthsTutorials(

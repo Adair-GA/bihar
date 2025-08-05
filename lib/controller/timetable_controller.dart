@@ -15,10 +15,10 @@ class TimetableController {
   final Map<DateTime, Dia> _cache = {};
 
   Future<DateTimeRange> getAvailable() async {
-    Map<String, dynamic> body = await GaurClient().getFechasConsulta();
-    DateTime start = DateTime.parse(body["minFec"]);
-    DateTime end = DateTime.parse(body["maxFec"]);
-    var dateTimeRange = DateTimeRange(start: start, end: end);
+    if (_available != null && !kDebugMode) {
+      return Future.value(_available);
+    }
+    var dateTimeRange = await GaurClient().getFechasConsulta();
     _available = dateTimeRange;
     return dateTimeRange;
   }
@@ -32,9 +32,8 @@ class TimetableController {
     if (date.isAfter(_available!.end) || date.isBefore(_available!.start)) {
       throw DayNotInRangeException(firstAvailableDay: _available!.start);
     }
-    final diaJSON = await GaurClient().getHorario(date);
+    final dia = await GaurClient().getHorario(date);
 
-    var dia = Dia.fromJson(diaJSON);
     _cache[date] = dia;
     return dia;
   }
