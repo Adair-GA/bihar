@@ -9,7 +9,7 @@ import 'package:bihar/model/tutorials/tutorial.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-
+import '../model/nota_provisional.dart';
 import '../model/dia.dart';
 import '../model/tutorials/subject_list.dart';
 
@@ -127,6 +127,21 @@ class GaurClient {
     postLogout();
     _authToken = null;
     LoginData.logout();
+  }
+
+  Future<List<NotaProvisional>> getNotasProvisionales() async {
+    String numExp = ProfileController().expedienteActivo!.numExpediente;
+    String url = "$_url/notas/getNotasProvisionales";
+    Response response = await post(Uri.parse(url), headers: {
+      "auth-token": _authToken!
+    }, body: {
+      "_numExp": numExp,
+      "_idp": LoginData.ldap!,
+      "_codPlan": ProfileController().expedienteActivo!.codplan
+    });
+    List<dynamic> json = jsonDecode(response.body);
+
+    return json.map((e) => NotaProvisional.fromJson(e)).toList();
   }
 
   Future<SubjectList> getSubjectsTutorial() async {
