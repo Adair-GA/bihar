@@ -47,6 +47,7 @@ dependencies:
 
 dependency_overrides:
   intl: any
+  shared_preferences_android: 2.4.10
 
 dev_dependencies:
   flutter_test:

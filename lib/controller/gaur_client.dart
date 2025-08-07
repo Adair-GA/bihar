@@ -9,8 +9,9 @@ import 'package:bihar/model/tutorials/tutorial.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import '../model/nota_provisional.dart';
+
 import '../model/dia.dart';
+import '../model/nota_provisional.dart';
 import '../model/tutorials/subject_list.dart';
 
 class TokenExpiredException implements Exception {}
@@ -85,7 +86,10 @@ class GaurClient {
           body[i]["numExpediente"],
           body[i]["descCentro"],
           body[i]["descPlan"],
-          body[i]["estadoExpediente"] == "Abierto"));
+        body[i]["codPlan"],
+        int.parse(body[i]["tipoEnsenanza"]),
+        body[i]["estadoExpediente"] == "Abierto",
+      ));
     }
     return expedientes;
   }
