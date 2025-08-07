@@ -50,7 +50,6 @@ class NotasController {
   } */
 
   Future<List<NotaProvisional>> getNotasProvisionales() async {
-    List<dynamic> json = await GaurClient().getNotasProvisionales();
-    return json.map((e) => NotaProvisional.fromJson(e)).toList();
+    return await GaurClient().getNotasProvisionales();
   }
 }

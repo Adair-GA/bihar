@@ -8,6 +8,8 @@ import 'package:bihar/model/tutorials/tutorial.dart';
 import 'package:http/http.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
+import '../model/nota_provisional.dart';
+
 class TokenExpiredException implements Exception {}
 
 class GaurClient {
@@ -110,7 +112,7 @@ class GaurClient {
     LoginData.logout();
   }
 
-  Future<dynamic> getNotasProvisionales() async {
+  Future<List<NotaProvisional>> getNotasProvisionales() async {
     String numExp = ProfileController().expedienteActivo!.numExpediente;
     String url = "$_url/notas/getNotasProvisionales";
     Response response = await post(Uri.parse(url), headers: {
@@ -120,7 +122,9 @@ class GaurClient {
       "_idp": LoginData.ldap!,
       "_codPlan": ProfileController().expedienteActivo!.codplan
     });
-    return (jsonDecode(response.body));
+    List<dynamic> json = jsonDecode(response.body);
+
+    return json.map((e) => NotaProvisional.fromJson(e)).toList();
   }
 
   Future<dynamic> getSubjectsTutorial() async {
