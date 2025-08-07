@@ -1,13 +1,11 @@
-
-
 import 'dart:convert';
+
 import 'package:bihar/model/dia.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 void main() {
   initializeDateFormatting();
-  Dia x = Dia.fromJson(jsonDecode(
-    '''
+  Dia x = Dia.fromJson(jsonDecode('''
     [{
       "dia": "Lunes",
       "fecha": "5 de febrero de 2024",

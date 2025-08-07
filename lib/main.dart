@@ -1,7 +1,7 @@
 import 'package:bihar/controller/login_data.dart';
 import 'package:bihar/homepage.dart';
 import 'package:bihar/login.dart';
-import 'package:bihar/splashpage.dart';
+import 'package:bihar/splashPage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';

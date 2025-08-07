@@ -17,8 +17,7 @@ class TutorialsController {
 
   Future<List<Subject>> getSubjectList() async {
     if (_subjectList == null || _subjectList!.subjectList.isEmpty) {
-      _subjectList =
-          SubjectList.fromJson(await GaurClient().getSubjectsTutorial());
+      _subjectList = await GaurClient().getSubjectsTutorial();
     }
     return _subjectList!.subjectList;
   }
