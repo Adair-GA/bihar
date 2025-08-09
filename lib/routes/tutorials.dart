@@ -61,6 +61,7 @@ class _TutorialsState extends State<Tutorials> {
     return ExpansionPanelList(
       expansionCallback: (int index, bool isExpanded) {
         setState(() {
+          _isOpen = List.filled(_isOpen.length, false);
           _isOpen[index] = isExpanded;
         });
       },
