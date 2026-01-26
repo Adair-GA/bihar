@@ -72,13 +72,14 @@ class _TeacherViewState extends State<TeacherView> {
         ],
       );
     }
-    _selectedMonth ??= monthList.first;
 
+    _selectedMonth ??= monthList.first;
     _tutorials ??= TutorialsController().getTutorials(
         widget.year,
         widget.teacher.codDpto,
         widget.teacher.idpProfesor,
         _selectedMonth!.code);
+
 
     var tutorialBuilder = FutureBuilder(
         future: _tutorials,
@@ -108,6 +109,11 @@ class _TeacherViewState extends State<TeacherView> {
               onChanged: (Month? value) {
                 setState(() {
                   _selectedMonth = value!;
+                  _tutorials = TutorialsController().getTutorials(
+                      widget.year,
+                      widget.teacher.codDpto,
+                      widget.teacher.idpProfesor,
+                      _selectedMonth!.code);
                 });
               },
             ),

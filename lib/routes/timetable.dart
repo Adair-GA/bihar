@@ -68,10 +68,14 @@ class _TimeTableState extends State<TimeTable> {
     if (day.clases.isEmpty) {
       return empty();
     }
-    return Column(
-      children: [
-        for (var clase in day.clases) getItem(clase),
-      ],
+    return Expanded(
+      child: ListView(
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        children: [
+          for (var clase in day.clases) getItem(clase),
+        ],
+      ),
     );
   }
 
@@ -150,124 +154,126 @@ class _TimeTableState extends State<TimeTable> {
   }
 
   Widget getItem(Clase clase) {
-    return InkWell(
-      child: Ink(
-        decoration: BoxDecoration(
-            color: Theme.of(context).brightness == Brightness.light
-                ? Colors.blue[200]
-                : const Color.fromARGB(255, 48, 144, 168)),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Flexible(
-              flex: 3,
-              fit: FlexFit.tight,
-              child: Column(
-                children: [
-                  Text(_getHora(clase.horaComienzo)),
-                  clase.conflict ? const Text(" ⚠️ ") : const Text(" | "),
-                  Text(_getHora(clase.horaFin)),
-                ],
-              ),
-            ),
-            Flexible(
-              flex: 16,
-              fit: FlexFit.tight,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
+    return Card(
+      child: InkWell(
+        child: Ink(
+          decoration: BoxDecoration(
+              color: Theme.of(context).brightness == Brightness.light
+                  ? Colors.blue[200]
+                  : const Color.fromARGB(255, 48, 144, 168)),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Flexible(
+                flex: 3,
+                fit: FlexFit.tight,
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      clase.nombreAsignatura,
-                      style: const TextStyle(
-                          fontSize: 17, fontWeight: FontWeight.bold),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Text(
-                      clase.getDesc(),
-                      style: const TextStyle(
-                          fontSize: 14, fontWeight: FontWeight.w100),
-                    )
+                    Text(_getHora(clase.horaComienzo)),
+                    clase.conflict ? const Text(" ⚠️ ") : const Text(" | "),
+                    Text(_getHora(clase.horaFin)),
                   ],
                 ),
               ),
-            ),
-            Flexible(
-              flex: 4,
-              fit: FlexFit.tight,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(clase.aula),
-                  ],
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-      onTap: () {
-        showDialog(
-            context: context,
-            builder: (BuildContext context) => AlertDialog(
-                  title: FittedBox(
-                      fit: BoxFit.fitWidth,
-                      child: Text(clase.nombreAsignatura)),
-                  content: Builder(
-                    builder: (context) {
-                      var width = MediaQuery.of(context).size.width;
-
-                      return SizedBox(
-                        width: width + 100,
-                        child: Table(
-                          columnWidths: const {
-                            0: IntrinsicColumnWidth(),
-                            1: FixedColumnWidth(16),
-                            2: FlexColumnWidth()
-                          },
-                          border: const TableBorder(
-                              verticalInside: BorderSide(
-                                  color: Color(0x000000FF), width: 3)),
-                          children: [
-                            TableRow(children: [
-                              const Text("Tipo"),
-                              const Text(" "),
-                              Text(
-                                clase.tipo,
-                                style: const TextStyle(height: 1.75),
-                              )
-                            ]),
-                            TableRow(children: [
-                              const Text("Grupo"),
-                              const Text(" "),
-                              Text(
-                                clase.grupo,
-                                style: const TextStyle(height: 1.75),
-                              )
-                            ]),
-                            TableRow(children: [
-                              const Text("Profesor"),
-                              const Text(" "),
-                              Text(clase.profesor,
-                                  style: const TextStyle(height: 1.75))
-                            ]),
-                            TableRow(children: [
-                              const Text("Lugar"),
-                              const Text(" "),
-                              Text('${clase.edificio} - ${clase.aula}',
-                                  style: const TextStyle(height: 1.75))
-                            ])
-                          ],
-                        ),
-                      );
-                    },
+              Flexible(
+                flex: 16,
+                fit: FlexFit.tight,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        clase.nombreAsignatura,
+                        style: const TextStyle(
+                            fontSize: 17, fontWeight: FontWeight.bold),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
+                        clase.getDesc(),
+                        style: const TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.w100),
+                      )
+                    ],
                   ),
-                ));
-      },
+                ),
+              ),
+              Flexible(
+                flex: 4,
+                fit: FlexFit.tight,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(clase.aula),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+        onTap: () {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) => AlertDialog(
+                    title: FittedBox(
+                        fit: BoxFit.fitWidth,
+                        child: Text(clase.nombreAsignatura)),
+                    content: Builder(
+                      builder: (context) {
+                        var width = MediaQuery.of(context).size.width;
+
+                        return SizedBox(
+                          width: width + 100,
+                          child: Table(
+                            columnWidths: const {
+                              0: IntrinsicColumnWidth(),
+                              1: FixedColumnWidth(16),
+                              2: FlexColumnWidth()
+                            },
+                            border: const TableBorder(
+                                verticalInside: BorderSide(
+                                    color: Color(0x000000FF), width: 3)),
+                            children: [
+                              TableRow(children: [
+                                const Text("Tipo"),
+                                const Text(" "),
+                                Text(
+                                  clase.tipo,
+                                  style: const TextStyle(height: 1.75),
+                                )
+                              ]),
+                              TableRow(children: [
+                                const Text("Grupo"),
+                                const Text(" "),
+                                Text(
+                                  clase.grupo,
+                                  style: const TextStyle(height: 1.75),
+                                )
+                              ]),
+                              TableRow(children: [
+                                const Text("Profesor"),
+                                const Text(" "),
+                                Text(clase.profesor,
+                                    style: const TextStyle(height: 1.75))
+                              ]),
+                              TableRow(children: [
+                                const Text("Lugar"),
+                                const Text(" "),
+                                Text('${clase.edificio} - ${clase.aula}',
+                                    style: const TextStyle(height: 1.75))
+                              ])
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ));
+        },
+      ),
     );
   }
 
